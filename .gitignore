@@ -20,6 +20,8 @@ project/db-data/*
 front-end/.vscode/*.log
 front-end/.DS_Store
 front-end/cmd/.DS_Store
+front-end/node_modules
+front-end/.nuxt
 */.editorconfig
 */package-lock.json
 
