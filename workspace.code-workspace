@@ -6,6 +6,15 @@
         {
             "path": "project"
         },
+        {
+            "path": "broker-service"
+        },
+        {
+            "path": "mail-service"
+        },
+        {
+            "path": "post-service"
+        }
     ],
     "settings": {
         "makefile.extensionOutputFolder": "./.vscode"
