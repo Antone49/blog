@@ -19,6 +19,15 @@ CREATE TABLE postTag (
     FOREIGN KEY(tagId) REFERENCES tag(id)
 );
 
+CREATE TABLE location (
+    postId int,
+    latitude float,
+    longitude float,
+    name character varying(255),
+    image character varying(255),
+    FOREIGN KEY(postId) REFERENCES post(id)
+);
+
 INSERT INTO post (id, title, thumbnailImage, image, content) VALUES 
 (1, 'Post 1', 'test.jpeg', 'test.jpeg', 'There are only two kinds of languages: the ones people complain about and the ones nobody uses.'), 
 (2, 'Post 2', 'test.jpeg', 'img1.png', 'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.'), 
@@ -47,3 +56,12 @@ INSERT INTO postTag (postId, tagId) VALUES
 (7, 'Voyages'),
 (7, 'Food'),
 (8, 'Administration');
+
+INSERT INTO location (postId, latitude, longitude, name, image) VALUES
+(1, 23.791474915526848, 90.40672529214094, 'dede1', 'restaurant.png'),
+(1, 23.781474915526848, 90.41672529214094, 'efefd', 'restaurant.png'),
+(1, 23.771474915526848, 90.42672529214094, 'aaaaa', 'restaurant.png'),
+(2, 23.761474915526848, 90.43672529214094, 'best', 'shop.png'),
+(3, 23.801474915526848, 90.44672529214094, 'zzzz', 'shop.png'),
+(3, 23.811474915526848, 90.39672529214094, 'loiuyt', 'restaurant.png'),
+(4, 23.821474915526848, 90.38672529214094, 'bzdsh', 'shop.png');

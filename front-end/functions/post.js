@@ -50,4 +50,14 @@ async function getLastestPosts(number) {
     return sendRequest(payload)
 }
 
-export { getAllPosts, getPost, getPostTags, getLastestPosts }
+async function getAllLocations() {
+  console.log('getAllLocations');
+
+  const payload = {
+      action: 'getAllLocations',
+  }
+
+  return sendRequest(payload)
+}
+
+export { getAllPosts, getPost, getPostTags, getLastestPosts, getAllLocations }

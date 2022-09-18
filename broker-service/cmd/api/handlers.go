@@ -56,13 +56,15 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 
 	switch requestPayload.Action {
 	case "getAllPosts":
-		app.getAllPosts(w, requestPayload.Auth)
+		app.getAllPosts(w)
 	case "getPost":
 		app.getPost(w, requestPayload.Post)
 	case "getLastestPosts":
 		app.getLastestPosts(w, requestPayload.Post)
 	case "getPostTags":
 		app.getPostTags(w, requestPayload.Post)
+	case "getAllLocations":
+		app.getAllLocations(w)
 	case "mailContactUs":
 		app.mailContactUs(w, requestPayload.Mail)
 	default:
@@ -127,12 +129,10 @@ func (app *Config) mailContactUs(w http.ResponseWriter, mail MailPayload) {
 	log.Printf("mailContactUs end\n")
 }
 
-func (app *Config) getAllPosts(w http.ResponseWriter, a AuthPayload) {
-	jsonData, _ := json.MarshalIndent(a, "", "\t")
-
+func (app *Config) getAllPosts(w http.ResponseWriter) {
 	log.Printf("getAllPosts\n")
 
-	request, err := http.NewRequest("GET", "http://post-service/getAllPosts", bytes.NewBuffer(jsonData))
+	request, err := http.NewRequest("GET", "http://post-service/getAllPosts", nil)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -295,13 +295,13 @@ func (app *Config) getPostTags(w http.ResponseWriter, p PostPayload) {
 
 	app.writeJSON(w, http.StatusAccepted, payload)
 
-	log.Printf("getPostTags end\n")
+	log.Println("getPostTags end")
 }
 
 func (app *Config) getLastestPosts(w http.ResponseWriter, p PostPayload) {
 	jsonData, _ := json.MarshalIndent(p, "", "\t")
 
-	log.Printf("getLastestPosts\n")
+	log.Println("getLastestPosts")
 
 	request, err := http.NewRequest("GET", "http://post-service/getLastestPosts", bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -352,5 +352,60 @@ func (app *Config) getLastestPosts(w http.ResponseWriter, p PostPayload) {
 
 	app.writeJSON(w, http.StatusAccepted, payload)
 
-	log.Printf("getLastestPosts end\n")
+	log.Println("getLastestPosts end")
+}
+
+func (app *Config) getAllLocations(w http.ResponseWriter) {
+	log.Println("getAllLocations")
+
+	request, err := http.NewRequest("GET", "http://post-service/getAllLocations", nil)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	defer response.Body.Close()
+
+	var responsePayload jsonResponse
+	if err != nil {
+		log.Println(responsePayload.Message)
+	}
+
+	if response.StatusCode == http.StatusUnauthorized {
+		app.errorJSON(w, errors.New("invalid credentials"))
+		return
+	} else if response.StatusCode != http.StatusAccepted {
+		app.errorJSON(w, errors.New("error call auth service"))
+		return
+	}
+
+	// create variable we will read response.Body
+	var jsonFromService jsonResponse
+
+	// decode
+	err = json.NewDecoder(response.Body).Decode(&jsonFromService)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	if jsonFromService.Error {
+		app.errorJSON(w, err, http.StatusUnauthorized)
+		return
+	}
+
+	var payload jsonResponse
+	payload.Error = false
+	payload.Message = "getAllLocations!"
+	payload.Data = jsonFromService.Data
+
+	app.writeJSON(w, http.StatusAccepted, payload)
+
+	log.Println("getAllLocations end")
 }

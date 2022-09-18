@@ -47,7 +47,7 @@ func (app *Config) getAllPosts(w http.ResponseWriter, r *http.Request) {
 
 	app.writeJSON(w, http.StatusAccepted, payload)
 
-	log.Printf("Post end\n")
+	log.Printf("getAllPosts end\n")
 }
 
 func (app *Config) getPost(w http.ResponseWriter, r *http.Request) {
@@ -146,7 +146,6 @@ func (app *Config) getLastestPosts(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
 	}
-	log.Printf("r %s\n", r)
 
 	log.Printf("number post to get: %d\n", requestPayload.Number)
 
@@ -173,4 +172,33 @@ func (app *Config) getLastestPosts(w http.ResponseWriter, r *http.Request) {
 	app.writeJSON(w, http.StatusAccepted, payload)
 
 	log.Printf("getLastestPosts end\n")
+}
+
+func (app *Config) getAllLocations(w http.ResponseWriter, r *http.Request) {
+
+	log.Printf("getAllLocations\n")
+
+	// validate the user against the database
+	locations, err := data.GetAllLocations()
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
+		return
+	}
+
+	b, err := json.Marshal(locations)
+	if err != nil {
+		fmt.Println("json err:", err)
+	}
+	log.Println(string(b))
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: fmt.Sprintf("getAllLocations!"),
+		Data: string(b),
+	}
+
+	app.writeJSON(w, http.StatusAccepted, payload)
+
+	log.Printf("getAllLocations end\n")
 }

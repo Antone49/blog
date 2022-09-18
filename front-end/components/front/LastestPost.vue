@@ -5,7 +5,7 @@
         <v-row class="my-5">
             <v-col xl="4" lg="4" md="4" sm="6" xs="12" v-for="(item, index) in datas" :key="index">
                 <v-card>
-                    <v-img height="250" :src="require('../../assets/images/' + item.thumbnailImage)"></v-img>
+                    <v-img height="250" :src="'images/' + item.thumbnailImage"></v-img>
                     <v-card-title>{{ item.title }}</v-card-title>
                     <v-card-subtitle>category</v-card-subtitle>
                     <v-card-text>

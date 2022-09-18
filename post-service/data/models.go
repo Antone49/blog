@@ -47,7 +47,51 @@ type Tag struct {
 	ID string `json:"id"`
 }
 
-// GetAll returns a slice of all posts, sorted by created
+type Location struct {
+	ID 			string 	`json:"id"`
+	Title 		string 	`json:"title"`
+	Latitude   	float64	`json:"latitude"`
+	Longitude  	float64	`json:"longitude"`
+	Image      	string	`json:"image"`
+}
+
+// GetAllLocations returns a slice of all post locations, sorted by created
+func GetAllLocations() ([]*Location, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	query := `select postId, latitude, longitude, name, image
+	from location`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var locations []*Location
+
+	for rows.Next() {
+		var location Location
+		err := rows.Scan(
+			&location.ID,
+			&location.Latitude,
+			&location.Longitude,
+			&location.Title,
+			&location.Image,
+		)
+		if err != nil {
+			log.Println("Error scanning", err)
+			return nil, err
+		}
+
+		locations = append(locations, &location)
+	}
+
+	return locations, nil
+}
+
+// GetAllPosts returns a slice of all posts, sorted by created
 func GetAllPosts() ([]*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()

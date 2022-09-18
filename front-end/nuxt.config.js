@@ -43,6 +43,7 @@ export default {
     '@nuxtjs/axios',
     // With default plugin options
     "vue-toastification/nuxt",
+    "nuxt-leaflet",
   ], 
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
