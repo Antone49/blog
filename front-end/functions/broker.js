@@ -1,6 +1,4 @@
   async function sendRequest(payload) {
-    console.log('sendRequest');
-  
     var result = null
   
     const headers = new Headers();

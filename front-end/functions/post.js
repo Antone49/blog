@@ -1,10 +1,13 @@
 import {sendRequest} from './broker.js';
 
-async function getAllPosts() {
+async function getAllPosts(search) {
   console.log('getAllPosts');
 
   const payload = {
       action: 'getAllPosts',
+      allPosts: {
+        search: search
+      }
   }
 
   return sendRequest(payload)
@@ -21,7 +24,17 @@ async function getPost(id) {
     }
   
     return sendRequest(payload)
-  }
+}
+
+async function getAllTags() {
+    console.log('getAllTags');
+
+    const payload = {
+        action: 'getAllTags',
+    }
+
+    return sendRequest(payload)
+}
 
 async function getPostTags(id) {
     console.log('getPostTags');
@@ -60,4 +73,4 @@ async function getAllLocations() {
   return sendRequest(payload)
 }
 
-export { getAllPosts, getPost, getPostTags, getLastestPosts, getAllLocations }
+export { getAllPosts, getPost, getAllTags, getPostTags, getLastestPosts, getAllLocations }

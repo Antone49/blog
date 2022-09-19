@@ -18,41 +18,33 @@ type Post struct {
 }
 
 func (app *Config) getAllPosts(w http.ResponseWriter, r *http.Request) {
+	log.Println("getAllPosts")
+	var requestPayload struct {
+		Search    string `json:"search"`
+	}
 
-	log.Printf("getAllPosts\n")
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 
 	// validate the user against the database
-	posts, err := data.GetAllPosts()
+	posts, err := data.GetAllPosts(requestPayload.Search)
 	if err != nil {
 		log.Println(err)
 		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
 		return
 	}
 
-	// var s []Post
-	// s = append(s, Post{Id: 1, Title: "Shanghai_VPN", Content: "127.0.0.1azfeeeeeeeeeeeeeeeeeeeeeeeeeeazertyuiopqsdfghjklmwxcvbn123456789azertyuiopqsdfghjklmwxcvbn", Thumbnail: "test.jpeg"})
-	// s = append(s, Post{Id: 2, Title: "Beijing_VPN", Content: "127.0.0.2", Thumbnail: "img1.png"})
-	
-	b, err := json.Marshal(posts)
-	if err != nil {
-		fmt.Println("json err:", err)
-	}
-	log.Println(string(b))
+	app.sendResponse(w, posts)
 
-	payload := jsonResponse{
-		Error:   false,
-		Message: fmt.Sprintf("Logged in user %s", "test"),
-		Data: string(b),
-	}
-
-	app.writeJSON(w, http.StatusAccepted, payload)
-
-	log.Printf("getAllPosts end\n")
+	log.Println("getAllPosts end")
 }
 
 func (app *Config) getPost(w http.ResponseWriter, r *http.Request) {
-
-	log.Printf("getPost\n")
+	log.Println("getPost")
 	var requestPayload struct {
 		Id    int `json:"id"`
 	}
@@ -64,8 +56,6 @@ func (app *Config) getPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("id: %d\n", requestPayload.Id)
-
 	// validate the user against the database
 	post, err := data.GetPost(requestPayload.Id)
 	if err != nil {
@@ -74,26 +64,29 @@ func (app *Config) getPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := json.Marshal(post)
+	app.sendResponse(w, post)
+
+	log.Println("getPost end")
+}
+
+func (app *Config) getAllTags(w http.ResponseWriter, r *http.Request) {
+	log.Println("getAllTags")
+
+	// validate the user against the database
+	posts, err := data.GetAllTags()
 	if err != nil {
-		fmt.Println("json err:", err)
-	}
-	log.Println(string(b))
-
-	payload := jsonResponse{
-		Error:   false,
-		Message: fmt.Sprintf("getPost!"),
-		Data: string(b),
+		log.Println(err)
+		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
+		return
 	}
 
-	app.writeJSON(w, http.StatusAccepted, payload)
+	app.sendResponse(w, posts)
 
-	log.Printf("getPost end\n")
+	log.Println("getAllTags end")
 }
 
 func (app *Config) getPostTags(w http.ResponseWriter, r *http.Request) {
-
-	log.Printf("getPostTags\n")
+	log.Println("getPostTags")
 	var requestPayload struct {
 		Id    int `json:"id"`
 	}
@@ -115,26 +108,13 @@ func (app *Config) getPostTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := json.Marshal(post)
-	if err != nil {
-		fmt.Println("json err:", err)
-	}
-	log.Println(string(b))
+	app.sendResponse(w, post)
 
-	payload := jsonResponse{
-		Error:   false,
-		Message: fmt.Sprintf("getPostTags!"),
-		Data: string(b),
-	}
-
-	app.writeJSON(w, http.StatusAccepted, payload)
-
-	log.Printf("getPostTags end\n")
+	log.Println("getPostTags end")
 }
 
 func (app *Config) getLastestPosts(w http.ResponseWriter, r *http.Request) {
-
-	log.Printf("getLastestPosts\n")
+	log.Println("getLastestPosts")
 
 	var requestPayload struct {
 		Number    int `json:"number"`
@@ -147,8 +127,6 @@ func (app *Config) getLastestPosts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("number post to get: %d\n", requestPayload.Number)
-
 	// validate the user against the database
 	post, err := data.GetLastestPosts(requestPayload.Number)
 	if err != nil {
@@ -157,26 +135,13 @@ func (app *Config) getLastestPosts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := json.Marshal(post)
-	if err != nil {
-		fmt.Println("json err:", err)
-	}
-	log.Println(string(b))
+	app.sendResponse(w, post)
 
-	payload := jsonResponse{
-		Error:   false,
-		Message: "getLastestPosts!",
-		Data: string(b),
-	}
-
-	app.writeJSON(w, http.StatusAccepted, payload)
-
-	log.Printf("getLastestPosts end\n")
+	log.Println("getLastestPosts end")
 }
 
 func (app *Config) getAllLocations(w http.ResponseWriter, r *http.Request) {
-
-	log.Printf("getAllLocations\n")
+	log.Println("getAllLocations")
 
 	// validate the user against the database
 	locations, err := data.GetAllLocations()
@@ -186,19 +151,24 @@ func (app *Config) getAllLocations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := json.Marshal(locations)
+	app.sendResponse(w, locations)
+
+	log.Println("getAllLocations end")
+}
+
+func (app *Config) sendResponse(w http.ResponseWriter, response any) {
+	b, err := json.Marshal(response)
 	if err != nil {
-		fmt.Println("json err:", err)
+		log.Println(err)
+		app.errorJSON(w, errors.New(err.Error()), http.StatusBadRequest)
+		return
 	}
-	log.Println(string(b))
 
 	payload := jsonResponse{
 		Error:   false,
-		Message: fmt.Sprintf("getAllLocations!"),
+		Message: fmt.Sprintf("response good!"),
 		Data: string(b),
 	}
 
 	app.writeJSON(w, http.StatusAccepted, payload)
-
-	log.Printf("getAllLocations end\n")
 }

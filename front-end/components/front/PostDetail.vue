@@ -22,17 +22,6 @@
                 <div class="my-10">
                     <v-card>
                         <v-card-title>
-                            <h3>Categorys</h3>
-                        </v-card-title>
-                        <v-card-text v-for="(item, index) in postTags" :key="index">
-                            <h4 class="mt-2">{{ item.id }}</h4>
-                        </v-card-text>
-                    </v-card>
-                </div>
-
-                <div class="my-10">
-                    <v-card>
-                        <v-card-title>
                             <h3>Lastest Posts</h3>
                         </v-card-title>
                         <v-card-text v-for="(item, index) in lastestPosts" :key="index">
@@ -42,6 +31,18 @@
                         </v-card-text>
                     </v-card>
                 </div>
+
+                <div class="my-10">
+                    <v-card>
+                        <v-card-title>
+                            <h3>Categorys</h3>
+                        </v-card-title>
+                        <v-card-text v-for="(item, index) in postTags" :key="index">
+                            <h4 class="mt-2">{{ item.id }}</h4>
+                        </v-card-text>
+                    </v-card>
+                </div>
+
             </v-col>
         </v-row>
         <v-row>

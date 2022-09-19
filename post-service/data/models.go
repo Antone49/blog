@@ -92,12 +92,25 @@ func GetAllLocations() ([]*Location, error) {
 }
 
 // GetAllPosts returns a slice of all posts, sorted by created
-func GetAllPosts() ([]*Post, error) {
+func GetAllPosts(search string) ([]*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
+	// Default query all posts
 	query := `select id, title, thumbnailImage, content, created_at, updated_at
 	from post order by created_at`
+
+	if len(search) > 0 {
+		query = `SELECT DISTINCT post.id, post.title, post.thumbnailImage, post.content, post.created_at, post.updated_at
+					FROM post
+				LEFT JOIN PostTag
+					ON PostTag.postId = post.Id
+				LEFT JOIN Tag
+					ON PostTag.tagId = Tag.Id
+				WHERE Tag.Id = '` + search + `'
+					OR post.title like '%` + search + `%'
+					OR post.content like '%` + search + `%';`
+	}
 
 	rows, err := db.QueryContext(ctx, query)
 	if err != nil {
@@ -189,6 +202,37 @@ func GetPost(id int) (*Post, error) {
 	}
 
 	return &post, nil
+}
+
+// GetAllTags returns a slice of all tags
+func GetAllTags() ([]*Tag, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	query := `select id from tag`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tags []*Tag
+
+	for rows.Next() {
+		var tag Tag
+		err := rows.Scan(
+			&tag.ID,
+		)
+		if err != nil {
+			log.Println("Error scanning", err)
+			return nil, err
+		}
+
+		tags = append(tags, &tag)
+	}
+
+	return tags, nil
 }
 
 // GetPostTags returns the tag post

@@ -16,7 +16,7 @@ import PostDetailHeroVue from "../../components/front/PostDetailHero.vue";
 import {
     getPost,
     getLastestPosts,
-    getPostTags
+    getAllTags
 } from '../../functions/post.js'
 
 export default {
@@ -45,7 +45,7 @@ export default {
     methods: {
         getPost,
         getLastestPosts,
-        getPostTags
+        getAllTags
     },
     mounted: function () {
         var pattern = "post-detail/"
@@ -62,7 +62,7 @@ export default {
             }
         });
 
-        this.getPostTags(idPost).then(result => {
+        this.getAllTags().then(result => {
             if (result != null) {
                 this['postTags'] = result
             }

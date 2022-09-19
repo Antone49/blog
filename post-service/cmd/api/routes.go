@@ -26,6 +26,7 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/getPost", app.getPost)
 	mux.Get("/getLastestPosts", app.getLastestPosts)
 	mux.Get("/getPostTags", app.getPostTags)
+	mux.Get("/getAllTags", app.getAllTags)
 	mux.Get("/getAllLocations", app.getAllLocations)
 
 	return mux
