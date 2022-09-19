@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavbarVue />
+    <NavbarMobileVue />
     <AboutHeroVue />
     <v-container class="my-10">
       <h1>About me</h1>
@@ -18,7 +18,7 @@
 <script>
 import AboutHeroVue from "../components/front/AboutHero.vue";
 import FooterVue from "../components/front/Footer.vue";
-import NavbarVue from "../components/front/Navbar.vue";
+import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 export default {
   name: "AboutPage",
   head(){
@@ -27,7 +27,7 @@ export default {
   }
   },
   components: {
-    NavbarVue,
+    NavbarMobileVue,
     FooterVue,
     AboutHeroVue,
   },

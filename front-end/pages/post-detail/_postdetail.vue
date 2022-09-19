@@ -1,15 +1,15 @@
 <template>
 <div>
-    <NavbarVue />
+    <NavbarMobileVue />
     <PostDetailHeroVue :title="item.title" />
-    <PostDetailVue :category="item.category" :title="item.title" :content="item.content" :image="item.image" :lastestPosts="lastestPosts" :postTags="postTags" />
+    <PostDetailVue :category="item.category" :title="item.title" :content="item.content" :image="item.image" :lastestPosts="lastestPosts" :tags="tags" />
     <FooterVue />
 </div>
 </template>
 
 <script>
 import FooterVue from "../../components/front/Footer.vue";
-import NavbarVue from "../../components/front/Navbar.vue";
+import NavbarMobileVue from "../../components/front/NavbarMobile.vue";
 import PostDetailVue from "../../components/front/PostDetail.vue";
 import PostDetailHeroVue from "../../components/front/PostDetailHero.vue";
 
@@ -27,7 +27,7 @@ export default {
         }
     },
     components: {
-        NavbarVue,
+        NavbarMobileVue,
         FooterVue,
         PostDetailHeroVue,
         PostDetailVue,
@@ -40,7 +40,7 @@ export default {
             image: "loading.png",
         },
         lastestPosts: null,
-        postTags: null
+        tags: null
     }),
     methods: {
         getPost,
@@ -64,7 +64,7 @@ export default {
 
         this.getAllTags().then(result => {
             if (result != null) {
-                this['postTags'] = result
+                this['tags'] = result
             }
         });
 

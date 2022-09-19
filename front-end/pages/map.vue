@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavbarVue />
+    <NavbarMobileVue />
     <AllPostHeroVue />
     <MapVue />
     <FooterVue />
@@ -11,7 +11,7 @@
 import MapVue from "../components/front/Map.vue";
 import AllPostHeroVue from "../components/front/AllPostHero.vue";
 import FooterVue from "../components/front/Footer.vue";
-import NavbarVue from "../components/front/Navbar.vue";
+import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 
 export default {
   name: "BlogPage",
@@ -21,7 +21,7 @@ export default {
   }
   },
   components: {
-    NavbarVue,
+    NavbarMobileVue,
     FooterVue,
     MapVue,
     AllPostHeroVue,

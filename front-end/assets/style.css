@@ -38,12 +38,17 @@ a{
 .nav__logo{
     font-size: 2rem;
     color: white !important;
-
-
 }
+
 .w__40{
     max-width: 50%;
-    
+}
+
+.hero_title{
+    color: rgb(101, 124, 223);
+    font-size: 1.3rem;
+    text-align: center;
+    font-family: "Gill Sans", sans-serif;
 }
 
 .nav_link{
@@ -74,9 +79,6 @@ a{
     background-repeat: no-repeat;
     background-size: cover;
     height: 80vh;
-    display:flex;
-    justify-content:center;
-    align-items: center;
 }
 .nuxt-link-active {
     border-bottom: 2px solid rgb(221, 226, 221);
@@ -122,19 +124,15 @@ ul li{
     }
     .navbar a{
         display: block !important;
-
     }
     .active_nav{
         display: block !important;
-
     }
     .navbar a{
         margin: 20px 0px !important;
-
     }
     .w__40{
         max-width: 100%;
         margin: 0px 20px !important;
-        
     }
 }

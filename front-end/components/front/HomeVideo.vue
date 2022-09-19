@@ -1,11 +1,11 @@
 <template>
 <div>
-  <div class="bg_image" style="background-image: url('/images/dhaka_2.jpg');height:60vh;">
+    <video-background src="images/boat.mp4" style="max-height: 1200px; height: 100vh;">
         <NavbarContentVue />
         <div class="hero_title">
-            <h1 >{{ title }}</h1>
+            <h1>Dhaka</h1>
         </div>
-    </div>
+    </video-background>
 </div>
 </template>
 
@@ -13,12 +13,10 @@
 import NavbarContentVue from "./NavbarContent.vue";
 
 export default {
-    name: "PostDetailHero",
-    props: {
-        title: String,
-    },
+    name: "HeroCamp",
     components: {
         NavbarContentVue,
+        [process.client && 'VideoBackground']: () => import('vue-responsive-video-background-player'),
     },
     data: () => ({
         model: 0,

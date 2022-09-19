@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavbarVue />
+    <NavbarMobileVue />
     <ContactHeroVue />
     <ContactFormVue />
     <FooterVue />
@@ -10,7 +10,7 @@
 import ContactFormVue from "../components/front/ContactForm.vue";
 import ContactHeroVue from "../components/front/ContactHero.vue";
 import FooterVue from "../components/front/Footer.vue";
-import NavbarVue from "../components/front/Navbar.vue";
+import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 
 export default {
   name: "ContactPage",
@@ -22,7 +22,7 @@ export default {
   components: {
     ContactHeroVue,
     FooterVue,
-    NavbarVue,
+    NavbarMobileVue,
     ContactFormVue,
   },
 };

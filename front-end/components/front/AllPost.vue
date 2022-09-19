@@ -2,9 +2,9 @@
 <div>
     <v-container class="my-10">
         <div class="d-flex align-center my-4">
-            <v-text-field label="Search Here ..." class="form__control" hide-details="auto" outlined>
+            <v-text-field @keydown.enter.prevent="search" label="Search Here ..." class="form__control" hide-details="auto" v-model="searchField" outlined>
             </v-text-field>
-            <v-btn color="success" text>Search</v-btn>
+            <v-btn @click="search" color="success" text>Search</v-btn>
         </div>
         <h1>All Post</h1>
         <v-row class="my-5">
@@ -38,13 +38,23 @@ export default {
         return {
             page: 1,
             datas: null,
+            searchField: null
         }
     },
     methods: {
-        getAllPosts
+        getAllPosts,
+        search(event) {
+            this.getAllPosts(this['searchField']).then(result => {
+                this['datas'] = result
+            });
+        }
     },
     mounted: function () {
-        this.getAllPosts().then(result => {
+        if (this.$route.query.search != null) {
+            this['searchField'] = this.$route.query.search
+        }
+
+        this.getAllPosts(this['searchField']).then(result => {
             this['datas'] = result
         });
     },

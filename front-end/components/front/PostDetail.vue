@@ -31,14 +31,15 @@
                         </v-card-text>
                     </v-card>
                 </div>
-
                 <div class="my-10">
                     <v-card>
                         <v-card-title>
                             <h3>Categorys</h3>
                         </v-card-title>
-                        <v-card-text v-for="(item, index) in postTags" :key="index">
-                            <h4 class="mt-2">{{ item.id }}</h4>
+                        <v-card-text v-for="(item, index) in tags" :key="index">
+                            <nuxt-link :to="{ path: '/blog?search=' + item.id }">
+                                <h4 class="mt-2">{{ item.id }}</h4>
+                            </nuxt-link>
                         </v-card-text>
                     </v-card>
                 </div>
@@ -80,7 +81,7 @@ export default {
         content: String,
         image: String,
         lastestPosts: Array,
-        postTags: Array,
+        tags: Array,
     },
 };
 </script>

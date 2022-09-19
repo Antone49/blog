@@ -1,22 +1,24 @@
-<template >
-  <div>
-    <div
-      class="bg_image"
-      style="background-image: url('https://images.unsplash.com/photo-1649651738909-967f63511615?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=60);height:30vh;"
-    >
-      <div class="w__40">
-        <h1 class="text--white">Home / Blog</h1>
-      </div>
+<template>
+<div>
+    <div class="bg_image" style="background-image: url('/images/dhaka_2.jpg');height:60vh;">
+        <NavbarContentVue />
     </div>
-  </div>
+</div>
 </template>
+
 <script>
+import NavbarContentVue from "./NavbarContent.vue";
+
 export default {
-  name: "AllPostHeroCamp",
-  data: () => ({
-    model: 0,
-  }),
+    name: "AllPostHeroCamp",
+    components: {
+        NavbarContentVue,
+    },
+    data: () => ({
+        model: 0,
+    }),
 };
 </script>
+
 <style>
 </style>

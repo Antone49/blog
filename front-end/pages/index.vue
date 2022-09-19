@@ -1,7 +1,8 @@
 <template>
   <div>
-    <NavbarVue />
-    <HeroVue />
+    <NavbarMobileVue />
+    <HomeVideoVue />
+    <HomeCarouselVue />
     <PopularPostVue />
     <LastestPostVue />
     <FooterVue />
@@ -10,9 +11,10 @@
 
 <script>
 import FooterVue from "../components/front/Footer.vue";
-import HeroVue from "../components/front/Hero.vue";
+import HomeVideoVue from "../components/front/HomeVideo.vue";
+import HomeCarouselVue from "../components/front/HomeCarousel.vue";
 import LastestPostVue from "../components/front/LastestPost.vue";
-import NavbarVue from "../components/front/Navbar.vue";
+import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 import PopularPostVue from "../components/front/PopularPost.vue";
 
 export default {
@@ -23,8 +25,9 @@ export default {
   }
   },
   components: {
-    NavbarVue,
-    HeroVue,
+    NavbarMobileVue,
+    HomeVideoVue,
+    HomeCarouselVue,
     PopularPostVue,
     LastestPostVue,
     FooterVue,
