@@ -28,6 +28,9 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/getPostTags", app.getPostTags)
 	mux.Get("/getAllTags", app.getAllTags)
 	mux.Get("/getAllLocations", app.getAllLocations)
+	mux.Post("/addTag", app.addTag)
+	mux.Post("/updateTag", app.updateTag)
+	mux.Post("/removeTag", app.removeTag)
 
 	return mux
 }

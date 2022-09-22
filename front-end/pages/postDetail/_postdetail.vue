@@ -3,6 +3,7 @@
     <NavbarMobileVue />
     <PostDetailHeroVue :title="item.title" />
     <PostDetailVue :category="item.category" :title="item.title" :content="item.content" :image="item.image" :lastestPosts="lastestPosts" :tags="tags" />
+    <PostMessageVue />
     <FooterVue />
 </div>
 </template>
@@ -11,6 +12,7 @@
 import FooterVue from "../../components/front/Footer.vue";
 import NavbarMobileVue from "../../components/front/NavbarMobile.vue";
 import PostDetailVue from "../../components/front/PostDetail.vue";
+import PostMessageVue from "../../components/front/PostMessage.vue";
 import PostDetailHeroVue from "../../components/front/PostDetailHero.vue";
 
 import {
@@ -32,6 +34,7 @@ export default {
         FooterVue,
         PostDetailHeroVue,
         PostDetailVue,
+        PostMessageVue,
     },
     data: () => ({
         item: {
@@ -49,29 +52,25 @@ export default {
         getAllTags
     },
     mounted: function () {
-        var pattern = "post-detail/"
-        var idPost = parseInt(location.pathname.substring(location.pathname.indexOf(pattern) + pattern.length));
-
-        console.log('idPost %d', idPost);
+        var idPost = parseInt(this.$route.query.id)
 
         this.getPost(idPost).then(result => {
             if (result != null) {
-                console.log('result.title %s', result.title);
-                this['item'].title = result.title
-                this['item'].content = result.content
-                this['item'].image = result.image
+                this.item.title = result.title
+                this.item.content = result.content
+                this.item.image = result.image
             }
         });
 
         this.getAllTags().then(result => {
             if (result != null) {
-                this['tags'] = result
+                this.tags = result
             }
         });
 
         this.getLastestPosts(4).then(result => {
             if (result != null) {
-                this['lastestPosts'] = result
+                this.lastestPosts = result
             }
         });
     },

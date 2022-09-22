@@ -2,9 +2,6 @@
 <div>
   <div class="bg_image" style="background-image: url('/images/dhaka_2.jpg');height:60vh;">
         <NavbarContentVue />
-        <div class="hero_title">
-            <h1 >{{ title }}</h1>
-        </div>
     </div>
 </div>
 </template>

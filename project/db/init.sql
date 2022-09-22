@@ -28,12 +28,13 @@ CREATE TABLE token (
 );
 
 CREATE TABLE tag (
-    id character varying(255) NOT NULL PRIMARY KEY
+    id SERIAL PRIMARY KEY,
+    name character varying(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE postTag (
     postId int,
-    tagId character varying(255),
+    tagId int,
     FOREIGN KEY(postId) REFERENCES post(id),
     FOREIGN KEY(tagId) REFERENCES tag(id)
 );
@@ -64,21 +65,21 @@ INSERT INTO users (name, password) VALUES
 ('admin', '$2a$12$izsNL.mM060wylkFp3As6eqpz9sqYjqm/8zK5zRv6LQcT7Va7hVDq'),
 ('root', 'root');
 
-INSERT INTO tag (id) VALUES 
+INSERT INTO tag (name) VALUES 
 ('Voyages'),
 ('Food'),
 ('Administration');
 
 INSERT INTO postTag (postId, tagId) VALUES 
-(1, 'Voyages'),
-(1, 'Food'),
-(1, 'Administration'),
-(2, 'Voyages'),
-(3, 'Food'),
-(4, 'Administration'),
-(7, 'Voyages'),
-(7, 'Food'),
-(8, 'Administration');
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 1),
+(3, 2),
+(4, 3),
+(7, 1),
+(7, 2),
+(8, 3);
 
 INSERT INTO location (postId, latitude, longitude, name, image) VALUES
 (1, 23.791474915526848, 90.40672529214094, 'dede1', 'restaurant.png'),

@@ -45,6 +45,7 @@ export default {
     // With default plugin options
     "vue-toastification/nuxt",
     "nuxt-leaflet",
+    "vue2-editor/nuxt",
   ], 
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

@@ -14,7 +14,7 @@
                     <v-card-title>{{ item.title }}</v-card-title>
                     <v-card-text>
                         <p>{{ item.content.substr(0, 50) }}.....</p>
-                        <nuxt-link :to="{ path: '/post-detail/' + item.id }">
+                        <nuxt-link :to="{ path: '/postDetail?id=' + item.id }">
                             <v-btn class="mb-2 btn__border" variant="contained" color="primary" text>Read More</v-btn>
                         </nuxt-link>
                     </v-card-text>

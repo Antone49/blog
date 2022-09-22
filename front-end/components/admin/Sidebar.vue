@@ -46,7 +46,7 @@ export default {
                 },
                 {
                     icon: "mdi-widgets",
-                    title: "Category",
+                    title: "Catégorie",
                     to: "/admin/category",
                 },
                 {
@@ -58,7 +58,7 @@ export default {
             miniVariant: false,
             right: true,
             rightDrawer: false,
-            title: "Mitech Blog",
+            title: "Blog",
         };
     },
     methods: {

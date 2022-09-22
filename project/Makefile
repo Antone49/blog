@@ -70,5 +70,3 @@ stop:
 	@echo "Stopping front end..."
 	killall node
 	@echo "Stopped front end!"
-
-

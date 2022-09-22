@@ -5,8 +5,7 @@ async function getAllPosts(search) {
 
   const payload = {
       action: 'getAllPosts',
-      token: 'CGfj9PPdZ6WJwrCVvH6Z4Oi22S07TTEmziT_QTsr2NA',
-      allPosts: {
+      post: {
         search: search
       }
   }
@@ -32,6 +31,49 @@ async function getAllTags() {
 
     const payload = {
         action: 'getAllTags',
+    }
+
+    return sendRequest(payload)
+}
+
+async function removeTag(token, name) {
+    console.log('removeTag');
+
+    const payload = {
+        action: 'removeTag',
+        token: token,
+        tag: {
+            id: name
+        }
+    }
+
+    return sendRequest(payload)
+}
+
+async function addTag(token, name) {
+    console.log('addTag');
+
+    const payload = {
+        action: 'addTag',
+        token: token,
+        tag: {
+            id: name
+        }
+    }
+
+    return sendRequest(payload)
+}
+
+async function updateTag(token, oldName, newName) {
+    console.log('updateTag');
+
+    const payload = {
+        action: 'updateTag',
+        token: token,
+        tag: {
+            oldName: oldName,
+            newName: newName
+        }
     }
 
     return sendRequest(payload)
@@ -74,4 +116,4 @@ async function getAllLocations() {
   return sendRequest(payload)
 }
 
-export { getAllPosts, getPost, getAllTags, getPostTags, getLastestPosts, getAllLocations }
+export { getAllPosts, getPost, getAllTags, addTag, updateTag, removeTag, getPostTags, getLastestPosts, getAllLocations }

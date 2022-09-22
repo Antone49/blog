@@ -2,35 +2,10 @@ package data
 
 import (
 	"context"
-	"database/sql"
 	"strconv"
-
-	//"errors"
 	"log"
 	"time"
-	//"golang.org/x/crypto/bcrypt"
 )
-
-const dbTimeout = time.Second * 3
-
-var db *sql.DB
-
-// New is the function used to create an instance of the data package. It returns the type
-// Model, which embeds all the types we want to be available to our application.
-func New(dbPool *sql.DB) Models {
-	db = dbPool
-
-	return Models{
-		Post: Post{},
-	}
-}
-
-// Models is the type for this package. Note that any model that is included as a member
-// in this type is available to us throughout the application, anywhere that the
-// app variable is used, provided that the model is also added in the New function.
-type Models struct {
-	Post Post
-}
 
 // Post is the structure which holds one post from the database.
 type Post struct {
@@ -43,56 +18,8 @@ type Post struct {
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
-type Tag struct {
-	ID string `json:"id"`
-}
-
-type Location struct {
-	ID 			string 	`json:"id"`
-	Title 		string 	`json:"title"`
-	Latitude   	float64	`json:"latitude"`
-	Longitude  	float64	`json:"longitude"`
-	Image      	string	`json:"image"`
-}
-
-// GetAllLocations returns a slice of all post locations, sorted by created
-func GetAllLocations() ([]*Location, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
-	defer cancel()
-
-	query := `select postId, latitude, longitude, name, image
-	from location`
-
-	rows, err := db.QueryContext(ctx, query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var locations []*Location
-
-	for rows.Next() {
-		var location Location
-		err := rows.Scan(
-			&location.ID,
-			&location.Latitude,
-			&location.Longitude,
-			&location.Title,
-			&location.Image,
-		)
-		if err != nil {
-			log.Println("Error scanning", err)
-			return nil, err
-		}
-
-		locations = append(locations, &location)
-	}
-
-	return locations, nil
-}
-
 // GetAllPosts returns a slice of all posts, sorted by created
-func GetAllPosts(search string) ([]*Post, error) {
+func (p *Post) GetAll(search string) ([]*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
@@ -141,8 +68,8 @@ func GetAllPosts(search string) ([]*Post, error) {
 	return posts, nil
 }
 
-// GetLastestPosts returns a slice of latest posts, sorted by created
-func GetLastestPosts(latest int) ([]*Post, error) {
+// GetLastest returns a slice of latest posts, sorted by created
+func (p *Post) GetLastest(latest int) ([]*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
@@ -179,7 +106,7 @@ func GetLastestPosts(latest int) ([]*Post, error) {
 }
 
 // Get returns one post by id
-func GetPost(id int) (*Post, error) {
+func (p *Post) Get(id int) (*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
@@ -204,39 +131,8 @@ func GetPost(id int) (*Post, error) {
 	return &post, nil
 }
 
-// GetAllTags returns a slice of all tags
-func GetAllTags() ([]*Tag, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
-	defer cancel()
-
-	query := `select id from tag`
-
-	rows, err := db.QueryContext(ctx, query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var tags []*Tag
-
-	for rows.Next() {
-		var tag Tag
-		err := rows.Scan(
-			&tag.ID,
-		)
-		if err != nil {
-			log.Println("Error scanning", err)
-			return nil, err
-		}
-
-		tags = append(tags, &tag)
-	}
-
-	return tags, nil
-}
-
-// GetPostTags returns the tag post
-func GetPostTags(id int) ([]*Tag, error) {
+// GetTags returns the tag post
+func (p *Post) GetTags(id int) ([]*Tag, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 

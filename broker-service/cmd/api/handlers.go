@@ -13,8 +13,8 @@ type RequestPayload struct {
 	Token 	    string  `json:"token,omitempty"`
 	Login       any 	`json:"login,omitempty"`
 	Logout      any 	`json:"logout,omitempty"`
-	AllPosts   	any 	`json:"allPosts,omitempty"`
 	Post   		any 	`json:"post,omitempty"`
+	Tag   		any 	`json:"tag,omitempty"`
 	Mail   		any 	`json:"mail,omitempty"`
 }
 
@@ -51,7 +51,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var actionMap = map[string]ActionMap{ 
-		"getAllPosts" : 		{false, 	app.getAllPosts, 		requestPayload.AllPosts},
+		"getAllPosts" : 		{false, 	app.getAllPosts, 		requestPayload.Post},
 		"getPost" : 			{false, 	app.getPost,  			requestPayload.Post},
 		"getLastestPosts" : 	{false, 	app.getLastestPosts, 	requestPayload.Post},
 		"getPostTags" : 		{false, 	app.getPostTags, 		requestPayload.Post},
@@ -60,18 +60,21 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		"mailContactUs" : 		{false, 	app.mailContactUs, 		requestPayload.Mail},
 		"login" : 				{false, 	app.login, 				requestPayload.Login},
 		"logout" : 				{false, 	app.logout, 			requestPayload.Logout},
+		"addTag" : 				{true,  	app.addTag, 			requestPayload.Tag},
+		"updateTag" : 			{true,  	app.updateTag, 			requestPayload.Tag},
+		"removeTag" : 			{true,  	app.removeTag, 			requestPayload.Tag},
 	}
 
 	// if action exists
 	if element, ok := actionMap[requestPayload.Action]; ok {
 		if element.VerifyToken == true {
-			log.Println(requestPayload.Token)
-
 			err := app.authenticateToken(w, requestPayload)
 			if err != nil {
 				log.Println("error authenticate token : ", err)
 				return
 			}
+
+			log.Println("Token verification correct")
 		}
 
 		element.Function(w, element.Args)
@@ -80,6 +83,18 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		log.Println("unknown action : " + requestPayload.Action)
 		app.errorJSON(w, errors.New("unknown action"))
 	}
+}
+
+func (app *Config) removeTag(w http.ResponseWriter, payload any) {
+	app.sendRequestPost(w, "POST", "removeTag", payload)
+}
+
+func (app *Config) updateTag(w http.ResponseWriter, payload any) {
+	app.sendRequestPost(w, "POST", "updateTag", payload)
+}
+
+func (app *Config) addTag(w http.ResponseWriter, payload any) {
+	app.sendRequestPost(w, "POST", "addTag", payload)
 }
 
 func (app *Config) login(w http.ResponseWriter, payload any) {
@@ -201,14 +216,5 @@ func (app *Config) sendRequest(w http.ResponseWriter, method, command string, js
 }
 
 func (app *Config) sendResponse(w http.ResponseWriter, command string, jsonFromService jsonResponse) {
-	var payload jsonResponse
-	payload.Error = false
-	payload.Message = command
-	payload.Data = jsonFromService.Data
-
-	if command == "http://authentication-service/login" && jsonFromService.Token != nil {
-		payload.Token = jsonFromService.Token
-	}
-
-	app.writeJSON(w, http.StatusAccepted, payload)
+	app.writeJSON(w, http.StatusAccepted, jsonFromService)
 }
