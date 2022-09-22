@@ -4,7 +4,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - Blog',
-    title: 'Mitech',
+    title: 'Blog',
     htmlAttrs: {
       lang: 'en'
     },
@@ -41,6 +41,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     // With default plugin options
     "vue-toastification/nuxt",
     "nuxt-leaflet",
@@ -73,5 +74,32 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  router: {
+    middleware: ['auth']
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          maxAge: 60 * 6, // 6 heures
+        },
+        endpoints: {
+          login: { url: 'http:\/\/localhost:8080/handle', method: 'POST', propertyName: 'token' },
+          logout: { url: 'http:\/\/localhost:8080/handle', method: 'POST' },
+          user: false
+        },
+      }
+    },
+    redirect: {
+      login: '/admin',
+      logout: '/',
+      callback: '/admin',
+      home: '/admin/dashboard'
+    },
+    watchLoggedIn: true,
+    localStorage: false
   }
 }

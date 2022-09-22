@@ -21,6 +21,7 @@ import FooterVue from "../components/front/Footer.vue";
 import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 export default {
   name: "AboutPage",
+  auth: false,
   head(){
   return{
    title:'About',

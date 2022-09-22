@@ -14,6 +14,7 @@ import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 
 export default {
   name: "ContactPage",
+  auth: false,
   head(){
   return{
    title:'Contact',

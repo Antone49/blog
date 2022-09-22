@@ -14,7 +14,8 @@ import FooterVue from "../components/front/Footer.vue";
 import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 
 export default {
-  name: "BlogPage",
+  name: "MapPage",
+  auth: false,
   head(){
   return{
    title:'Blog',

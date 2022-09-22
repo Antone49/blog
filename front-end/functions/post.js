@@ -5,6 +5,7 @@ async function getAllPosts(search) {
 
   const payload = {
       action: 'getAllPosts',
+      token: 'CGfj9PPdZ6WJwrCVvH6Z4Oi22S07TTEmziT_QTsr2NA',
       allPosts: {
         search: search
       }

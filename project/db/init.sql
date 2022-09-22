@@ -1,3 +1,5 @@
+-- docker exec -it project_postgres_1 psql -U postgres -d blog
+
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
     title character varying(255) NOT NULL UNIQUE,
@@ -6,6 +8,23 @@ CREATE TABLE post (
     content character varying(1024) NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name character varying(255) NOT NULL UNIQUE,
+    password character varying(255) NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE token (
+    id SERIAL PRIMARY KEY,
+    token character varying(255) NOT NULL UNIQUE,
+    userId int,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    expired_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY(userId) REFERENCES users(id)
 );
 
 CREATE TABLE tag (
@@ -28,18 +47,22 @@ CREATE TABLE location (
     FOREIGN KEY(postId) REFERENCES post(id)
 );
 
-INSERT INTO post (id, title, thumbnailImage, image, content) VALUES 
-(1, 'Post 1', 'test.jpeg', 'test.jpeg', 'There are only two kinds of languages: the ones people complain about and the ones nobody uses.'), 
-(2, 'Post 2', 'test.jpeg', 'img1.png', 'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.'), 
-(3, 'Post 3', 'test.jpeg', 'test.jpeg', 'First, solve the problem. Then, write the code.'), 
-(4, 'Post 4', 'test.jpeg', 'img1.png', 'Java is to JavaScript what car is to Carpet.'), 
-(5, 'Post 5', 'test.jpeg', 'test.jpeg', 'Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.'), 
-(6, 'Post 6', 'test.jpeg', 'test.jpeg', 'I''m not a great programmer; I''m just a good programmer with great habits.'), 
-(7, 'Post 7', 'test.jpeg', 'test.jpeg', 'Truth can only be found in one place: the code.'), 
-(8, 'Post 8', 'test.jpeg', 'test.jpeg', 'If you have to spend effort looking at a fragment of code and figuring out what it''s doing, then you should extract it into a function and name the function after the "what".'), 
-(9, 'Post 9', 'test.jpeg', 'test.jpeg', 'The real problem is that programmers have spent far too much time worrying about efficiency in the wrong places and at the wrong times; premature optimization is the root of all evil (or at least most of it) in programming.'), 
-(10, 'Post 10', 'test.jpeg', 'test.jpeg', 'SQL, Lisp, and Haskell are the only programming languages that I’ve seen where one spends more time thinking than typing.'), 
-(11, 'Post 11', 'test.jpeg', 'test.jpeg', 'Deleted code is debugged code.');
+INSERT INTO post (title, thumbnailImage, image, content) VALUES
+('Post 1', 'test.jpeg', 'test.jpeg', 'There are only two kinds of languages: the ones people complain about and the ones nobody uses.'),
+('Post 2', 'test.jpeg', 'img1.png', 'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.'),
+('Post 3', 'test.jpeg', 'test.jpeg', 'First, solve the problem. Then, write the code.'),
+('Post 4', 'test.jpeg', 'img1.png', 'Java is to JavaScript what car is to Carpet.'),
+('Post 5', 'test.jpeg', 'test.jpeg', 'Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.'),
+('Post 6', 'test.jpeg', 'test.jpeg', 'I''m not a great programmer; I''m just a good programmer with great habits.'),
+('Post 7', 'test.jpeg', 'test.jpeg', 'Truth can only be found in one place: the code.'),
+('Post 8', 'test.jpeg', 'test.jpeg', 'If you have to spend effort looking at a fragment of code and figuring out what it''s doing, then you should extract it into a function and name the function after the "what".'),
+('Post 9', 'test.jpeg', 'test.jpeg', 'The real problem is that programmers have spent far too much time worrying about efficiency in the wrong places and at the wrong times; premature optimization is the root of all evil (or at least most of it) in programming.'),
+('Post 10', 'test.jpeg', 'test.jpeg', 'SQL, Lisp, and Haskell are the only programming languages that I’ve seen where one spends more time thinking than typing.'),
+('Post 11', 'test.jpeg', 'test.jpeg', 'Deleted code is debugged code.');
+
+INSERT INTO users (name, password) VALUES
+('admin', '$2a$12$izsNL.mM060wylkFp3As6eqpz9sqYjqm/8zK5zRv6LQcT7Va7hVDq'),
+('root', 'root');
 
 INSERT INTO tag (id) VALUES 
 ('Voyages'),

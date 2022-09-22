@@ -21,6 +21,7 @@ import {
 
 export default {
     name: "PostDetail",
+    auth: false,
     head() {
         return {
             title: this.item.title,

@@ -2,8 +2,11 @@
 <div>
     <video-background src="images/boat.mp4" style="max-height: 1200px; height: 100vh;">
         <NavbarContentVue />
-        <div class="hero_title">
-            <h1>Dhaka</h1>
+        <div class="cta-row">
+            <div class="hero_title">
+                <h1>Bienvenue à</h1>
+                <h1>Dhaka</h1>
+            </div>
         </div>
     </video-background>
 </div>

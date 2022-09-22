@@ -15,6 +15,7 @@ import NavbarMobileVue from "../components/front/NavbarMobile.vue";
 
 export default {
   name: "BlogPage",
+  auth: false,
   head(){
   return{
    title:'Blog',

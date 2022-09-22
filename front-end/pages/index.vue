@@ -3,7 +3,6 @@
     <NavbarMobileVue />
     <HomeVideoVue />
     <HomeCarouselVue />
-    <PopularPostVue />
     <LastestPostVue />
     <FooterVue />
   </div>
@@ -19,6 +18,7 @@ import PopularPostVue from "../components/front/PopularPost.vue";
 
 export default {
   name: "IndexPage",
+  auth: false,
   head(){
   return{
    title:'Home',

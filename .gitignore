@@ -15,7 +15,7 @@
 # vendor/
 
 go.sum
-project/db-data/*
+project/db/data/*
 */*App
 front-end/.vscode/*.log
 front-end/.DS_Store

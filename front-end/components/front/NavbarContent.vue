@@ -7,6 +7,7 @@
             <nuxt-link to="/map" class="nav_link" exact>Map</nuxt-link>
             <nuxt-link to="/about" class="nav_link" exact>About</nuxt-link>
             <nuxt-link to="/contact" class="nav_link" exact>Contact</nuxt-link>
+            <nuxt-link to="/admin" class="nav_link" exact>Admin</nuxt-link>
         </div>
     </div>
 </v-container>

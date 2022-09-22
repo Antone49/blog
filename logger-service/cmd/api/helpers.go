@@ -11,7 +11,6 @@ type jsonResponse struct {
 	Error bool `json:"error"`
 	Message string `json:"message"`
 	Data any `json:"data,omitempty"`
-	Token any `json:"token,omitempty"`
 }
 
 func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) error {
@@ -66,7 +65,5 @@ func (app *Config) errorJSON(w http.ResponseWriter, err error, status ...int) er
 	payload.Error = true
 	payload.Message = err.Error()
 
-	app.writeJSON(w, statusCode, payload)
-
-	return err
+	return app.writeJSON(w, statusCode, payload)
 }

@@ -44,11 +44,22 @@ a{
     max-width: 50%;
 }
 
+.cta-row {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .hero_title{
-    color: rgb(101, 124, 223);
-    font-size: 1.3rem;
+    color: rgb(43, 134, 63);
+    font-size: 2.3rem;
     text-align: center;
     font-family: "Gill Sans", sans-serif;
+    width: 70%;
+    top: 10%;
+    position: absolute;
 }
 
 .nav_link{
