@@ -8,7 +8,7 @@
                     <v-btn color="secondary" class="mb-4">Annuler</v-btn>
                 </nuxt-link>
                 <v-card>
-                    <v-card-title> Supprimer Catégorie</v-card-title>
+                    <v-card-title>Supprime Catégorie</v-card-title>
                     <v-card-subtitle>
                         <form action="" class="form">
                             <v-text-field :readonly="true" class="form__control" v-model="categoryField" hide-details="auto">
@@ -29,7 +29,7 @@ import SidebarVue from "/components/admin/Sidebar.vue";
 
 import {
     removeTag
-} from '/functions/post.js'
+} from '/functions/tag.js'
 
 export default {
     name: "RemoveCategoryPage",
@@ -48,7 +48,7 @@ export default {
     },
     methods: {
         removeBtn() {
-            removeTag(this.$auth.strategy.token.get(), this.$route.query.name)
+            removeTag(this.$auth.strategy.token.get(), parseInt(this.$route.query.id))
             this.$router.push({path: '/admin/category'})
         }
     },

@@ -6,7 +6,7 @@ import (
 )
 
 type Tag struct {
-	ID   int    `json:"id"`
+	Id   int    `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -28,7 +28,7 @@ func (t *Tag) GetAll() ([]*Tag, error) {
 	for rows.Next() {
 		var tag Tag
 		err := rows.Scan(
-			&tag.ID,
+			&tag.Id,
 			&tag.Name,
 		)
 		if err != nil {
@@ -59,15 +59,30 @@ func (t *Tag) Insert(name string) error {
 	return nil
 }
 
-func (t *Tag) UpdateByName(oldName, newName string) error {
+func (t *Tag) Update(id int, name string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
 	stmt := `update tag set
 		name = $1 
-		where name = $2
+		where id = $2
 	`
-	_, err := db.ExecContext(ctx, stmt, newName, oldName)
+	_, err := db.ExecContext(ctx, stmt, name, id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (t *Tag) Remove(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `delete from tag where id = $1`
+
+	_, err := db.ExecContext(ctx, stmt, id)
 
 	if err != nil {
 		return err

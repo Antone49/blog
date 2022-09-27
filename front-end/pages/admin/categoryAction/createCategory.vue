@@ -30,7 +30,7 @@ import SidebarVue from "/components/admin/Sidebar.vue";
 import {
     addTag,
     getAllTags
-} from '/functions/post.js'
+} from '/functions/tag.js'
 
 export default {
     name: "createCategoryPage",

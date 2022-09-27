@@ -6,8 +6,8 @@
             <v-card-text class="d-flex justify-space-between align-center">
                 <v-card-title v-if="posts != null"> Posts ({{ posts.length }}) </v-card-title>
                 <v-card-actions>
-                    <nuxt-link to="/admin/postAction/createPost">
-                        <v-btn color="red lighten-2"> New </v-btn>
+                    <nuxt-link to="/admin/postAction/editPost">
+                        <v-btn color="red lighten-2"> Nouveau </v-btn>
                     </nuxt-link>
                 </v-card-actions>
             </v-card-text>
@@ -34,25 +34,25 @@
                                 <td class="">{{ item.title }}</td>
                                 <td class="">Php</td>
                                 <td class="">
-                                    <v-img :src="'/images/' + item.thumbnailImage" width="70" cover></v-img>
+                                    <v-img :src="'/images/' + item.image" width="70" height="60" cover></v-img>
                                 </td>
                                 <td class="">44</td>
                                 <td class="">
-                                    <nuxt-link :to="'/admin/postDetail/?id=' + item.id">
+                                    <nuxt-link :to="'/postDetail?id=' + item.id">
                                         <v-btn text class="ma-2" @click="view_dialog = true" variant="text" color="blue">
                                             <v-icon color="green darken-3">mdi-eye</v-icon>
                                         </v-btn>
                                     </nuxt-link>
                                 </td>
                                 <td class="">
-                                    <nuxt-link :to="'/admin/postAction/updatePost/?id=' + item.id">
+                                    <nuxt-link :to="'/admin/postAction/editPost?id=' + item.id">
                                         <v-btn text class="ma-2" variant="text" color="blue">
                                             <v-icon color="blue darken-3"> mdi-pencil</v-icon>
                                         </v-btn>
                                     </nuxt-link>
                                 </td>
                                 <td class="">
-                                    <nuxt-link :to="{ path: '/admin/postAction/removePost?name=' + item.title }">
+                                    <nuxt-link :to="{ path: '/admin/postAction/removePost?id=' + item.id + '&name=' + item.title }">
                                         <v-btn text class="ma-2" variant="text" color="red">
                                             <v-icon color="red darken-3">mdi-delete</v-icon>
                                         </v-btn>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import SidebarVue from "../../components/admin/Sidebar.vue";
+import SidebarVue from "/components/admin/Sidebar.vue";
 
 import {
     getAllPosts,

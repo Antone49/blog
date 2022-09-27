@@ -7,50 +7,48 @@ import (
 
 // PostTag is the structure which holds one post from the database.
 type PostTag struct {
-	PostId	int       
-	TagId	int
+	PostId int      `json:"postId"`
+	TagId  int      `json:"tagId"`
 }
 
-// GetTagsFromPostId returns the tag post
-func (p *PostTag) GetTagsFromPostId(idPost int) ([]*Tag, error) {
+// GetAll returns a slice of all PostTag, sorted by created
+func (p *PostTag) GetAll(search string) ([]*PostTag, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	query := `select name 
-				from Tag 
-			LEFT JOIN PostTag
-				ON PostTag.postId = $1
-			WHERE PostTag.tagId = Tag.id`
+	// Default query all posts
+	query := `select postId, tagId from post`
 
-	rows, err := db.QueryContext(ctx, query, idPost)
+	rows, err := db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var tags []*Tag
+	var postTags []*PostTag
 
 	for rows.Next() {
-		var tag Tag
+		var postTag PostTag
 		err := rows.Scan(
-			&tag.ID,
+			&postTag.PostId,
+			&postTag.TagId,
 		)
 		if err != nil {
 			log.Println("Error scanning", err)
 			return nil, err
 		}
 
-		tags = append(tags, &tag)
+		postTags = append(postTags, &postTag)
 	}
 
-	return tags, nil
+	return postTags, nil
 }
 
-func (t *PostTag) RemoveByTagId(tagId string) error {
+func (t *PostTag) RemoveByTagId(tagId int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	stmt := `delete from PostTag where tagId = $1`
+	stmt := `delete from postTag where tagId = $1`
 
 	_, err := db.ExecContext(ctx, stmt, tagId)
 
@@ -78,3 +76,72 @@ func (t *PostTag) RemoveByTagName(tagName string) error {
 
 	return nil
 }
+
+func (t *PostTag) RemoveByPostId(postId int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `delete from PostTag where postId = $1`
+
+	_, err := db.ExecContext(ctx, stmt, postId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetTagsFromPostId returns the tag post
+func (p *PostTag) GetTagsFromPostId(idPost int) ([]*Tag, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	query := `select id, name 
+				from Tag 
+			LEFT JOIN PostTag
+				ON PostTag.postId = $1
+			WHERE PostTag.tagId = Tag.id`
+
+	rows, err := db.QueryContext(ctx, query, idPost)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tags []*Tag
+
+	for rows.Next() {
+		var tag Tag
+		err := rows.Scan(
+			&tag.Id,
+			&tag.Name,
+		)
+		if err != nil {
+			log.Println("Error scanning", err)
+			return nil, err
+		}
+
+		tags = append(tags, &tag)
+	}
+
+	return tags, nil
+}
+
+func (p *PostTag) InsertFromPostId(idPost int, idTag []int) (error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	for _, element := range idTag {
+		stmt := `insert into PostTag (postId, tagId)
+			values ($1, $2)`
+
+		_, err := db.ExecContext(ctx, stmt, idPost, element)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+

@@ -9,17 +9,20 @@
 </template>
 
 <script>
-import FooterVue from "../../components/front/Footer.vue";
-import NavbarMobileVue from "../../components/front/NavbarMobile.vue";
-import PostDetailVue from "../../components/front/PostDetail.vue";
-import PostMessageVue from "../../components/front/PostMessage.vue";
-import PostDetailHeroVue from "../../components/front/PostDetailHero.vue";
+import FooterVue from "/components/front/Footer.vue";
+import NavbarMobileVue from "/components/front/NavbarMobile.vue";
+import PostDetailVue from "/components/front/PostDetail.vue";
+import PostMessageVue from "/components/front/PostMessage.vue";
+import PostDetailHeroVue from "/components/front/PostDetailHero.vue";
 
 import {
     getPost,
-    getLastestPosts,
+    getLastestPosts
+} from '/functions/post.js'
+
+import {
     getAllTags
-} from '../../functions/post.js'
+} from '/functions/tag.js'
 
 export default {
     name: "PostDetail",

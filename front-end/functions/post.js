@@ -26,53 +26,47 @@ async function getPost(id) {
     return sendRequest(payload)
 }
 
-async function getAllTags() {
-    console.log('getAllTags');
+async function removePost(token, id) {
+    console.log('removePost');
 
     const payload = {
-        action: 'getAllTags',
-    }
-
-    return sendRequest(payload)
-}
-
-async function removeTag(token, name) {
-    console.log('removeTag');
-
-    const payload = {
-        action: 'removeTag',
+        action: 'removePost',
         token: token,
-        tag: {
-            id: name
+        post: {
+            id: id
         }
     }
 
     return sendRequest(payload)
 }
 
-async function addTag(token, name) {
-    console.log('addTag');
+async function addPost(token, title, image, content) {
+    console.log('addPost');
 
     const payload = {
-        action: 'addTag',
+        action: 'addPost',
         token: token,
-        tag: {
-            id: name
+        post: {
+            title: title,
+            image: image,
+            content: content,
         }
     }
 
     return sendRequest(payload)
 }
 
-async function updateTag(token, oldName, newName) {
-    console.log('updateTag');
+async function updatePost(token, id, title, image, content) {
+    console.log('updatePost');
 
     const payload = {
-        action: 'updateTag',
+        action: 'updatePost',
         token: token,
-        tag: {
-            oldName: oldName,
-            newName: newName
+        post: {
+            id: id,
+            title: title,
+            image: image,
+            content: content,
         }
     }
 
@@ -91,7 +85,21 @@ async function getPostTags(id) {
 
     return sendRequest(payload)
 }
-  
+
+async function updatePostTags(token, postId, tagsId) {
+    console.log('updatePostTags');
+
+    const payload = {
+        action: 'updatePostTags',
+        token: token,
+        postTag: {
+            postId: postId,
+            tagsId: tagsId
+        }
+    }
+
+    return sendRequest(payload)
+}
 
 async function getLastestPosts(number) {
     console.log('getLastestPosts');
@@ -99,21 +107,11 @@ async function getLastestPosts(number) {
     const payload = {
         action: 'getLastestPosts',
         post: {
-        number: number
+            number: number
         }
     }
 
     return sendRequest(payload)
 }
 
-async function getAllLocations() {
-  console.log('getAllLocations');
-
-  const payload = {
-      action: 'getAllLocations',
-  }
-
-  return sendRequest(payload)
-}
-
-export { getAllPosts, getPost, getAllTags, addTag, updateTag, removeTag, getPostTags, getLastestPosts, getAllLocations }
+export { getAllPosts, getPost, addPost, removePost, updatePost, getPostTags, updatePostTags, getLastestPosts }

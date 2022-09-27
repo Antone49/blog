@@ -1,13 +1,17 @@
 <template>
 <div>
     <SidebarVue />
-    <DashboardVue />
+    <DashboardVue :posts="posts"/>
 </div>
 </template>
 
 <script>
 import DashboardVue from "../../components/admin/Dashboard.vue";
 import SidebarVue from "../../components/admin/Sidebar.vue";
+
+import {
+    getAllPosts,
+} from '/functions/post.js'
 
 export default {
     name: "DashboardPage",
@@ -19,6 +23,16 @@ export default {
     components: {
         SidebarVue,
         DashboardVue,
+    },
+    data: () => ({
+        posts: null
+    }),
+    mounted: function () {
+        getAllPosts().then(result => {
+            if (result != null) {
+                this.posts = result
+            }
+        });
     },
 };
 </script>

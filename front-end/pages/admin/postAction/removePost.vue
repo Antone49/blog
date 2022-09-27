@@ -8,7 +8,7 @@
                     <v-btn color="secondary" class="mb-4">Annuler</v-btn>
                 </nuxt-link>
                 <v-card>
-                    <v-card-title> Supprimer Post</v-card-title>
+                    <v-card-title>Supprime Post</v-card-title>
                     <v-card-subtitle>
                         <form action="" class="form">
                             <v-text-field :readonly="true" class="form__control" v-model="postField" hide-details="auto">
@@ -28,7 +28,7 @@
 import SidebarVue from "/components/admin/Sidebar.vue";
 
 import {
-    removeTag
+    removePost
 } from '/functions/post.js'
 
 export default {
@@ -48,7 +48,7 @@ export default {
     },
     methods: {
         removeBtn() {
-            removeTag(this.$auth.strategy.token.get(), this.$route.query.name)
+            removePost(this.$auth.strategy.token.get(), parseInt(this.$route.query.id))
             this.$router.push({path: '/admin/post'})
         }
     },

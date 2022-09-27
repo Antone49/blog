@@ -5,12 +5,13 @@
         <v-row class="my-5">
             <v-col xl="4" lg="4" md="4" sm="6" xs="12" v-for="(item, index) in datas" :key="index">
                 <v-card>
-                    <v-img height="250" :src="'images/' + item.thumbnailImage"></v-img>
+                    <v-img height="250" :src="'images/' + item.image"></v-img>
                     <v-card-title>{{ item.title }}</v-card-title>
                     <v-card-subtitle>category</v-card-subtitle>
                     <v-card-text>
-                        <p>{{ item.content.substr(0, 50) }}.....</p>
-                        <nuxt-link :to="{ path: '/post-detail/' + item.id }">
+                        <div v-html="item.content.substr(0, 50)" id="app">
+                        </div>
+                        <nuxt-link :to="{ path: '/postDetail?id=' + item.id }">
                             <v-btn class="mb-2 btn__border" variant="contained" color="primary" text>Read More</v-btn>
                         </nuxt-link>
                     </v-card-text>

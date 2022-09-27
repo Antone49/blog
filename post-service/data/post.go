@@ -2,20 +2,19 @@ package data
 
 import (
 	"context"
-	"strconv"
 	"log"
+	"strconv"
 	"time"
 )
 
 // Post is the structure which holds one post from the database.
 type Post struct {
-	ID             int       `json:"id"`
-	Title          string    `json:"title"`
-	ThumbnailImage string    `json:"thumbnailImage"`
-	Image          string    `json:"image"`
-	Content        string    `json:"content"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
+	Id             int       `json:"id"`
+	Title          string    `json:"title",omitempty`
+	Image          string    `json:"image",omitempty`
+	Content        string    `json:"content",omitempty`
+	CreatedAt      time.Time `json:"created_at",omitempty`
+	UpdatedAt      time.Time `json:"updated_at",omitempty`
 }
 
 // GetAllPosts returns a slice of all posts, sorted by created
@@ -24,11 +23,11 @@ func (p *Post) GetAll(search string) ([]*Post, error) {
 	defer cancel()
 
 	// Default query all posts
-	query := `select id, title, thumbnailImage, content, created_at, updated_at
+	query := `select id, title, image, content, created_at, updated_at
 	from post order by created_at`
 
 	if len(search) > 0 {
-		query = `SELECT DISTINCT post.id, post.title, post.thumbnailImage, post.content, post.created_at, post.updated_at
+		query = `SELECT DISTINCT post.id, post.title, post.image, post.content, post.created_at, post.updated_at
 					FROM post
 				LEFT JOIN PostTag
 					ON PostTag.postId = post.Id
@@ -50,9 +49,9 @@ func (p *Post) GetAll(search string) ([]*Post, error) {
 	for rows.Next() {
 		var post Post
 		err := rows.Scan(
-			&post.ID,
+			&post.Id,
 			&post.Title,
-			&post.ThumbnailImage,
+			&post.Image,
 			&post.Content,
 			&post.CreatedAt,
 			&post.UpdatedAt,
@@ -73,7 +72,7 @@ func (p *Post) GetLastest(latest int) ([]*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	query := `select id, title, thumbnailImage, content, created_at, updated_at
+	query := `select id, title, image, content, created_at, updated_at
 	from post order by created_at limit ` + strconv.Itoa(latest)
 
 	rows, err := db.QueryContext(ctx, query)
@@ -87,9 +86,9 @@ func (p *Post) GetLastest(latest int) ([]*Post, error) {
 	for rows.Next() {
 		var post Post
 		err := rows.Scan(
-			&post.ID,
+			&post.Id,
 			&post.Title,
-			&post.ThumbnailImage,
+			&post.Image,
 			&post.Content,
 			&post.CreatedAt,
 			&post.UpdatedAt,
@@ -116,7 +115,7 @@ func (p *Post) Get(id int) (*Post, error) {
 	row := db.QueryRowContext(ctx, query, id)
 
 	err := row.Scan(
-		&post.ID,
+		&post.Id,
 		&post.Title,
 		&post.Image,
 		&post.Content,
@@ -131,57 +130,26 @@ func (p *Post) Get(id int) (*Post, error) {
 	return &post, nil
 }
 
-// GetTags returns the tag post
-func (p *Post) GetTags(id int) ([]*Tag, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
-	defer cancel()
-
-	query := `select tagId from postTag where postId = $1`
-
-	rows, err := db.QueryContext(ctx, query, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var tags []*Tag
-
-	for rows.Next() {
-		var tag Tag
-		err := rows.Scan(
-			&tag.ID,
-		)
-		if err != nil {
-			log.Println("Error scanning", err)
-			return nil, err
-		}
-
-		tags = append(tags, &tag)
-	}
-
-	return tags, nil
-}
-
 // Update updates one post in the database, using the information
 // stored in the receiver u
-func (p *Post) Update() error {
+func (p *Post) Update(post Post) error {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
 	stmt := `update post set
 		title = $1,
-		thumbnail = $2,
+		image = $2,
 		content = $3,
 		updated_at = $4
 		where id = $5
 	`
 
 	_, err := db.ExecContext(ctx, stmt,
-		p.Title,
-		p.ThumbnailImage,
-		p.Content,
+		post.Title,
+		post.Image,
+		post.Content,
 		time.Now(),
-		p.ID,
+		post.Id,
 	)
 
 	if err != nil {
@@ -192,13 +160,13 @@ func (p *Post) Update() error {
 }
 
 // DeleteByID deletes one post from the database, by Post.ID
-func (p *Post) DeleteByID() error {
+func (p *Post) Delete(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
 	stmt := `delete from post where id = $1`
 
-	_, err := db.ExecContext(ctx, stmt, p.ID)
+	_, err := db.ExecContext(ctx, stmt, id)
 	if err != nil {
 		return err
 	}
@@ -207,25 +175,24 @@ func (p *Post) DeleteByID() error {
 }
 
 // Insert inserts a new user into the database, and returns the ID of the newly inserted row
-func (p *Post) Insert(user Post) (int, error) {
+func (p *Post) Insert(post Post) (error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	var newID int
-	stmt := `insert into post (title, thumbnail, content, created_at, updated_at)
-		values ($1, $2, $3, $4, $5) returning id`
+	stmt := `insert into post (title, image, content, created_at, updated_at)
+		values ($1, $2, $3, $4, $5)`
 
-	err := db.QueryRowContext(ctx, stmt,
-		user.Title,
-		user.ThumbnailImage,
-		user.Content,
+	_, err := db.ExecContext(ctx, stmt,
+		post.Title,
+		post.Image,
+		post.Content,
 		time.Now(),
 		time.Now(),
-	).Scan(&newID)
+	)
 
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	return newID, nil
+	return nil
 }

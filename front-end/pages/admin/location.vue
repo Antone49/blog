@@ -4,9 +4,9 @@
     <v-container>
         <v-card>
             <v-card-text class="d-flex justify-space-between align-center">
-                <v-card-title v-if="tags != null"> Catégories ({{ tags.length }}) </v-card-title>
+                <v-card-title v-if="location != null"> Locations ({{ location.length }}) </v-card-title>
                 <v-card-actions>
-                    <nuxt-link to="/admin/categoryAction/createCategory">
+                    <nuxt-link to="/admin/locationAction/editLocation?id=0">
                         <v-btn color="red lighten-2">New </v-btn>
                     </nuxt-link>
                 </v-card-actions>
@@ -18,23 +18,31 @@
                     <template v-slot:default>
                         <thead>
                             <tr>
-                                <th class="text-left">Catégorie</th>
+                                <th class="text-left">Nom</th>
+                                <th class="text-left">Image</th>
+                                <th class="text-left">Longitude</th>
+                                <th class="text-left">Latitude</th>
                                 <th class="text-left">Editer</th>
                                 <th class="text-left">Supprimer</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in tags" :key="index">
+                            <tr v-for="(item, index) in location" :key="index">
                                 <td class="text-left">{{ item.name }}</td>
+                                <td class="">
+                                    <v-img :src="'/images/location/' + item.image" width="30" height="30" cover></v-img>
+                                </td>
+                                <td class="text-left">{{ item.longitude }}</td>
+                                <td class="text-left">{{ item.latitude }}</td>
                                 <td class="text-left">
-                                    <nuxt-link :to="{ path: '/admin/categoryAction/updateCategory?id=' + item.id + '&name=' + item.name }">
+                                    <nuxt-link :to="{ path: '/admin/locationAction/editLocation?id=' + item.id }">
                                         <v-btn text class="ma-2" @click="edit_dialog = true" variant="text" color="blue">
                                             <v-icon color="blue darken-3"> mdi-pencil</v-icon>
                                         </v-btn>
                                     </nuxt-link>
                                 </td>
                                 <td class="text-left">
-                                    <nuxt-link :to="{ path: '/admin/categoryAction/removeCategory?id=' + item.id + '&name=' + item.name }">
+                                    <nuxt-link :to="{ path: '/admin/locationAction/removeLocation?id=' + item.id + '&name=' + item.name}">
                                         <v-btn text class="ma-2" variant="text" color="red">
                                             <v-icon color="red darken-3"> mdi-delete</v-icon>
                                         </v-btn>
@@ -47,36 +55,36 @@
             </v-card-subtitle>
         </v-card>
     </v-container>
+    <MapVue />
 </div>
 </template>
 
 <script>
 import SidebarVue from "/components/admin/Sidebar.vue";
+import MapVue from "/components/front/Map.vue";
 
 import {
-    getAllTags
-} from '/functions/tag.js'
+    getAllLocations,
+} from '/functions/location.js'
 
 export default {
-    name: "CategoryPage",
+    name: "LocationPage",
     head() {
         return {
-            title: 'Category',
+            title: 'Location',
         }
     },
     data: () => ({
-        tags: null
+        location: null
     }),
     components: {
         SidebarVue,
-    },
-    methods: {
-        getAllTags,
+        MapVue,
     },
     mounted: function () {
-        this.getAllTags().then(result => {
+        getAllLocations().then(result => {
             if (result != null) {
-                this['tags'] = result
+                this.location = result
             }
         });
     },

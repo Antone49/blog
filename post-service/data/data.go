@@ -19,6 +19,7 @@ func New(dbPool *sql.DB) Models {
 		Location: Location{},
 		Tag: Tag{},
 		PostTag: PostTag{},
+		PostLocation: PostLocation{},
 	}
 }
 
@@ -30,4 +31,5 @@ type Models struct {
 	Location Location
 	Tag Tag
 	PostTag PostTag
+	PostLocation PostLocation
 }

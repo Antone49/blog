@@ -85,7 +85,7 @@ export default {
     strategies: {
       local: {
         token: {
-          maxAge: 60 * 6, // 6 heures
+          maxAge: 60 * 60 * 6, // 6 heures
         },
         endpoints: {
           login: { url: 'http:\/\/localhost:8080/handle', method: 'POST', propertyName: 'token' },

@@ -8,7 +8,7 @@
                     <v-btn color="secondary" class="mb-4">Annuler</v-btn>
                 </nuxt-link>
                 <v-card>
-                    <v-card-title> Update Catégorie</v-card-title>
+                    <v-card-title>Edit Catégorie</v-card-title>
                     <v-card-subtitle>
                         <form action="" class="form">
                             <v-text-field @keydown.enter.prevent="saveBtn" label="Saisir une Catégorie" class="form__control" v-model="categoryField" hide-details="auto">
@@ -30,7 +30,7 @@ import SidebarVue from "/components/admin/Sidebar.vue";
 import {
     updateTag,
     getAllTags
-} from '/functions/post.js'
+} from '/functions/tag.js'
 
 export default {
     name: "EditCategoryPage",
@@ -56,7 +56,7 @@ export default {
                     var found = false
 
                     for (const item in result) {
-                        if (result[item].id === this.categoryField) {
+                        if (result[item].name === this.categoryField) {
                             this.$toast.warning("La nouvelle catégorie existe déjà !");
                             found = true
                             break
@@ -64,7 +64,7 @@ export default {
                     }
 
                     if (found == false) {
-                        updateTag(this.$auth.strategy.token.get(), this.$route.query.name, this.categoryField)
+                        updateTag(this.$auth.strategy.token.get(), parseInt(this.$route.query.id), this.categoryField)
                         this.$router.push({path: '/admin/category'})
                     }
                 });

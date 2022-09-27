@@ -45,14 +45,19 @@ export default {
                     to: "/admin/dashboard",
                 },
                 {
+                    icon: "mdi-post",
+                    title: "Post",
+                    to: "/admin/post",
+                },
+                {
                     icon: "mdi-widgets",
                     title: "Catégorie",
                     to: "/admin/category",
                 },
                 {
-                    icon: "mdi-post",
-                    title: "Post",
-                    to: "/admin/post",
+                    icon: "mdi-map-marker-outline",
+                    title: "Location",
+                    to: "/admin/location",
                 },
             ],
             miniVariant: false,

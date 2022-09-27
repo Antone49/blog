@@ -8,12 +8,12 @@
                     <l-tile-layer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"></l-tile-layer>
                     <l-marker v-for="(item, index) in datas" :key="index" :lat-lng="[item.latitude,item.longitude]">
                         <l-popup>
-                            <nuxt-link :to="{ path: '/post-detail/' + item.id }">
-                                <h4 class="mt-2">{{item.title}}</h4>
+                            <nuxt-link :to="{ path: '/postDetail?id=' + item.id }">
+                                <h4 class="mt-2">{{item.name}}</h4>
                             </nuxt-link>
                         </l-popup>
                         <l-icon>
-                            <img height="20px" :src="'images/' + item.image" />
+                            <img height="20px" :src="'/images/location/' + item.image" />
                         </l-icon>
                     </l-marker>
                 </l-map>
@@ -26,7 +26,7 @@
 <script>
 import {
     getAllLocations
-} from '../../functions/post.js'
+} from '/functions/location.js'
 
 export default {
     name: "MapVue",
@@ -35,11 +35,8 @@ export default {
             datas: null,
         }
     },
-    methods: {
-        getAllLocations
-    },
     mounted: function () {
-        this.getAllLocations().then(result => {
+        getAllLocations().then(result => {
             this['datas'] = result
         });
     },

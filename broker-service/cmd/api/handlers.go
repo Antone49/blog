@@ -14,15 +14,19 @@ type RequestPayload struct {
 	Login       any 	`json:"login,omitempty"`
 	Logout      any 	`json:"logout,omitempty"`
 	Post   		any 	`json:"post,omitempty"`
+	PostTag   	any 	`json:"postTag,omitempty"`
 	Tag   		any 	`json:"tag,omitempty"`
 	Mail   		any 	`json:"mail,omitempty"`
+	Location   	any 	`json:"location,omitempty"`
 }
 
-type PointerFunc func(w http.ResponseWriter, payload any)
+type PointerFunc func(w http.ResponseWriter, method, command string, payload any)
 
 type ActionMap struct {
 	VerifyToken     bool
-	Function   		PointerFunc 
+	Function   		PointerFunc
+	Method 			string
+	Command         string
 	Args   			any 
 }
 
@@ -51,18 +55,26 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var actionMap = map[string]ActionMap{ 
-		"getAllPosts" : 		{false, 	app.getAllPosts, 		requestPayload.Post},
-		"getPost" : 			{false, 	app.getPost,  			requestPayload.Post},
-		"getLastestPosts" : 	{false, 	app.getLastestPosts, 	requestPayload.Post},
-		"getPostTags" : 		{false, 	app.getPostTags, 		requestPayload.Post},
-		"getAllTags" : 			{false, 	app.getAllTags, 		nil},
-		"getAllLocations" : 	{false, 	app.getAllLocations, 	nil},
-		"mailContactUs" : 		{false, 	app.mailContactUs, 		requestPayload.Mail},
-		"login" : 				{false, 	app.login, 				requestPayload.Login},
-		"logout" : 				{false, 	app.logout, 			requestPayload.Logout},
-		"addTag" : 				{true,  	app.addTag, 			requestPayload.Tag},
-		"updateTag" : 			{true,  	app.updateTag, 			requestPayload.Tag},
-		"removeTag" : 			{true,  	app.removeTag, 			requestPayload.Tag},
+		"getAllPosts" : 		{false, 	app.sendRequestPost, 			"GET", 		"getAllPosts", 			requestPayload.Post},
+		"getPost" : 			{false, 	app.sendRequestPost, 			"GET", 		"getPost",  			requestPayload.Post},
+		"addPost" : 			{true,  	app.sendRequestPost, 			"POST", 	"addPost", 				requestPayload.Post},
+		"updatePost" : 			{true,  	app.sendRequestPost,			"POST", 	"updatePost", 			requestPayload.Post},
+		"removePost" : 			{true,  	app.sendRequestPost, 			"POST", 	"removePost", 			requestPayload.Post},
+		"getLastestPosts" : 	{false, 	app.sendRequestPost, 			"GET", 		"getLastestPosts", 		requestPayload.Post},
+		"getPostTags" : 		{false, 	app.sendRequestPost, 			"GET", 		"getPostTags", 			requestPayload.Post},
+		"updatePostTags" : 		{true, 		app.sendRequestPost, 			"POST", 	"updatePostTags", 		requestPayload.PostTag},
+		"getAllTags" : 			{false, 	app.sendRequestPost, 			"GET", 		"getAllTags", 			nil},
+		"getAllLocations" : 	{false, 	app.sendRequestPost, 			"GET", 		"getAllLocations", 		nil},
+		"getLocation" : 		{true,  	app.sendRequestPost, 			"GET", 		"getLocation", 			requestPayload.Location},
+		"addLocation" : 		{true,  	app.sendRequestPost, 			"POST", 	"addLocation", 			requestPayload.Location},
+		"updateLocation" : 		{true,  	app.sendRequestPost,			"POST", 	"updateLocation", 		requestPayload.Location},
+		"removeLocation" : 		{true,  	app.sendRequestPost, 			"POST", 	"removeLocation", 		requestPayload.Location},
+		"mailContactUs" : 		{false, 	app.sendRequestMail, 			"POST", 	"send", 				requestPayload.Mail},
+		"login" : 				{false, 	app.sendRequestAuthentication, 	"POST", 	"login", 				requestPayload.Login},
+		"logout" : 				{false, 	app.sendRequestAuthentication, 	"POST", 	"logout", 				requestPayload.Logout},
+		"addTag" : 				{true,  	app.sendRequestPost, 			"POST", 	"addTag", 				requestPayload.Tag},
+		"updateTag" : 			{true,  	app.sendRequestPost,			"POST", 	"updateTag", 			requestPayload.Tag},
+		"removeTag" : 			{true,  	app.sendRequestPost, 			"POST", 	"removeTag", 			requestPayload.Tag},
 	}
 
 	// if action exists
@@ -77,60 +89,12 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 			log.Println("Token verification correct")
 		}
 
-		element.Function(w, element.Args)
+		element.Function(w, element.Method, element.Command, element.Args)
 
 	} else {
 		log.Println("unknown action : " + requestPayload.Action)
 		app.errorJSON(w, errors.New("unknown action"))
 	}
-}
-
-func (app *Config) removeTag(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "POST", "removeTag", payload)
-}
-
-func (app *Config) updateTag(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "POST", "updateTag", payload)
-}
-
-func (app *Config) addTag(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "POST", "addTag", payload)
-}
-
-func (app *Config) login(w http.ResponseWriter, payload any) {
-	app.sendRequestAuthentication(w, "POST", "login", payload)
-}
-
-func (app *Config) logout(w http.ResponseWriter, payload any) {
-	app.sendRequestAuthentication(w, "POST", "logout", payload)
-}
-
-func (app *Config) mailContactUs(w http.ResponseWriter, payload any) {
-	app.sendRequestMail(w, "POST", "send", payload)
-}
-
-func (app *Config) getAllPosts(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "GET", "getAllPosts", payload)
-}
-
-func (app *Config) getPost(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "GET", "getPost", payload)
-}
-
-func (app *Config) getPostTags(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "GET", "getPostTags", payload)
-}
-
-func (app *Config) getAllTags(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "GET", "getAllTags", payload)
-}
-
-func (app *Config) getLastestPosts(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "GET", "getLastestPosts", payload)
-}
-
-func (app *Config) getAllLocations(w http.ResponseWriter, payload any) {
-	app.sendRequestPost(w, "GET", "getAllLocations", payload)
 }
 
 func (app *Config) authenticateToken(w http.ResponseWriter, payload any) error {

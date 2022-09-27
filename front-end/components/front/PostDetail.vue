@@ -21,7 +21,7 @@
                             <h3>Lastest Posts</h3>
                         </v-card-title>
                         <v-card-text v-for="(item, index) in lastestPosts" :key="index">
-                            <nuxt-link :to="{ path: '/post-detail/' + item.id }">
+                            <nuxt-link :to="{ path: '/postDetail?id=' + item.id }">
                                 <h4 class="mt-2">{{ item.title }}</h4>
                             </nuxt-link>
                         </v-card-text>

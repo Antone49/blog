@@ -6,7 +6,7 @@
                 <v-card class="d-flex justify-space-between">
                     <v-card>
                         <v-card-title>Post</v-card-title>
-                        <v-card-subtitle>99</v-card-subtitle>
+                        <v-card-subtitle v-if="posts != null">{{ posts.length }}</v-card-subtitle>
                     </v-card>
                     <v-card-actions>
                         <v-icon large color="blue-grey darken-2">
@@ -42,7 +42,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <DashboardTableVue />
+        <DashboardTableVue :posts="posts"/>
     </v-container>
 </div>
 </template>
@@ -54,6 +54,9 @@ export default {
     name: "DasboardComp",
     components: {
         DashboardTableVue,
+    },
+    props: {
+        posts: undefined,
     },
 };
 </script>
