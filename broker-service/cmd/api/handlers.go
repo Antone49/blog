@@ -9,15 +9,16 @@ import (
 )
 
 type RequestPayload struct {
-	Action 		string  `json:"action"`
-	Token 	    string  `json:"token,omitempty"`
-	Login       any 	`json:"login,omitempty"`
-	Logout      any 	`json:"logout,omitempty"`
-	Post   		any 	`json:"post,omitempty"`
-	PostTag   	any 	`json:"postTag,omitempty"`
-	Tag   		any 	`json:"tag,omitempty"`
-	Mail   		any 	`json:"mail,omitempty"`
-	Location   	any 	`json:"location,omitempty"`
+	Action 			string  `json:"action"`
+	Token 	    	string  `json:"token,omitempty"`
+	Login       	any 	`json:"login,omitempty"`
+	Logout     	 	any 	`json:"logout,omitempty"`
+	Post   			any 	`json:"post,omitempty"`
+	PostTag   		any 	`json:"postTag,omitempty"`
+	PostLocation   	any 	`json:"postLocation,omitempty"`
+	Tag   			any 	`json:"tag,omitempty"`
+	Mail   			any 	`json:"mail,omitempty"`
+	Location   		any 	`json:"location,omitempty"`
 }
 
 type PointerFunc func(w http.ResponseWriter, method, command string, payload any)
@@ -69,6 +70,8 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		"addLocation" : 		{true,  	app.sendRequestPost, 			"POST", 	"addLocation", 			requestPayload.Location},
 		"updateLocation" : 		{true,  	app.sendRequestPost,			"POST", 	"updateLocation", 		requestPayload.Location},
 		"removeLocation" : 		{true,  	app.sendRequestPost, 			"POST", 	"removeLocation", 		requestPayload.Location},
+		"getPostLocations" : 	{false, 	app.sendRequestPost, 			"GET", 		"getPostLocations", 	requestPayload.Post},
+		"updatePostLocations" : {true, 		app.sendRequestPost, 			"POST", 	"updatePostLocations",	requestPayload.PostLocation},
 		"mailContactUs" : 		{false, 	app.sendRequestMail, 			"POST", 	"send", 				requestPayload.Mail},
 		"login" : 				{false, 	app.sendRequestAuthentication, 	"POST", 	"login", 				requestPayload.Login},
 		"logout" : 				{false, 	app.sendRequestAuthentication, 	"POST", 	"logout", 				requestPayload.Logout},

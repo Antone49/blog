@@ -101,6 +101,34 @@ async function updatePostTags(token, postId, tagsId) {
     return sendRequest(payload)
 }
 
+async function getPostLocations(id) {
+    console.log('getPostLocations');
+
+    const payload = {
+        action: 'getPostLocations',
+        post: {
+            id: id
+        }
+    }
+
+    return sendRequest(payload)
+}
+
+async function updatePostLocations(token, postId, locationId) {
+    console.log('updatePostLocations');
+
+    const payload = {
+        action: 'updatePostLocations',
+        token: token,
+        postLocation: {
+            postId: postId,
+            locationId: locationId
+        }
+    }
+
+    return sendRequest(payload)
+}
+
 async function getLastestPosts(number) {
     console.log('getLastestPosts');
 
@@ -114,4 +142,4 @@ async function getLastestPosts(number) {
     return sendRequest(payload)
 }
 
-export { getAllPosts, getPost, addPost, removePost, updatePost, getPostTags, updatePostTags, getLastestPosts }
+export { getAllPosts, getPost, addPost, removePost, updatePost, getPostTags, updatePostTags, getLastestPosts, getPostLocations, updatePostLocations }

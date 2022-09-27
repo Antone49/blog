@@ -39,6 +39,8 @@ func (app *Config) routes() http.Handler {
 	mux.Post("/updateLocation", app.updateLocation)
 	mux.Post("/removeLocation", app.removeLocation)
 	mux.Post("/updatePostTags", app.updatePostTags)
+	mux.Get("/getPostLocations", app.getPostLocations)
+	mux.Post("/updatePostLocations", app.updatePostLocations)
 
 	return mux
 }

@@ -87,13 +87,13 @@ INSERT INTO postTag (postId, tagId) VALUES
 (8, 3);
 
 INSERT INTO location (latitude, longitude, name, image) VALUES
-(23.791474915526848, 90.40672529214094, 'dede1', 'restaurant.png'),
-(23.781474915526848, 90.41672529214094, 'efefd', 'restaurant.png'),
-(23.771474915526848, 90.42672529214094, 'aaaaa', 'restaurant.png'),
-(23.761474915526848, 90.43672529214094, 'best', 'shop.png'),
-(23.801474915526848, 90.44672529214094, 'zzzz', 'shop.png'),
-(23.811474915526848, 90.39672529214094, 'loiuyt', 'restaurant.png'),
-(23.821474915526848, 90.38672529214094, 'bzdsh', 'shop.png');
+(23.791474915526848, 90.40672529214094, 'dede1', './restaurant.png'),
+(23.781474915526848, 90.41672529214094, 'efefd', './restaurant.png'),
+(23.771474915526848, 90.42672529214094, 'aaaaa', './restaurant.png'),
+(23.761474915526848, 90.43672529214094, 'best', './shop.png'),
+(23.801474915526848, 90.44672529214094, 'zzzz', './shop.png'),
+(23.811474915526848, 90.39672529214094, 'loiuyt', './restaurant.png'),
+(23.821474915526848, 90.38672529214094, 'bzdsh', './shop.png');
 
 INSERT INTO postLocation (postId, locationId) VALUES 
 (1, 1),
