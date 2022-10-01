@@ -4,7 +4,7 @@
         <v-row>
             <v-col xl="8" lg="8" md="8" sm="12">
                 <div class="my-10">
-                    <img style="width: 100%" :src="'/images/' + image" :alt="title" />
+                    <img style="width: 100%" :src="image" :alt="title" />
                     <div class="my-2">
                         <h2>{{ title }}</h2>
                     </div>

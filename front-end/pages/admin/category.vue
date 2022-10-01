@@ -6,8 +6,8 @@
             <v-card-text class="d-flex justify-space-between align-center">
                 <v-card-title v-if="tags != null"> Catégories ({{ tags.length }}) </v-card-title>
                 <v-card-actions>
-                    <nuxt-link to="/admin/categoryAction/createCategory">
-                        <v-btn color="red lighten-2">New </v-btn>
+                    <nuxt-link to="/admin/categoryAction/editCategory">
+                        <v-btn color="red lighten-2">New</v-btn>
                     </nuxt-link>
                 </v-card-actions>
             </v-card-text>
@@ -27,7 +27,7 @@
                             <tr v-for="(item, index) in tags" :key="index">
                                 <td class="text-left">{{ item.name }}</td>
                                 <td class="text-left">
-                                    <nuxt-link :to="{ path: '/admin/categoryAction/updateCategory?id=' + item.id + '&name=' + item.name }">
+                                    <nuxt-link :to="{ path: '/admin/categoryAction/editCategory?id=' + item.id + '&name=' + item.name }">
                                         <v-btn text class="ma-2" @click="edit_dialog = true" variant="text" color="blue">
                                             <v-icon color="blue darken-3"> mdi-pencil</v-icon>
                                         </v-btn>

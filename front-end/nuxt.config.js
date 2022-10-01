@@ -16,16 +16,20 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~/assets/style.css'
+    '~/assets/style.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    {
+      src: "~/plugins/tinymce.js",
+      mode: "client", // This way the plugin will only be initiated on the client side
+    },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -45,7 +49,6 @@ export default {
     // With default plugin options
     "vue-toastification/nuxt",
     "nuxt-leaflet",
-    "vue2-editor/nuxt",
   ], 
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

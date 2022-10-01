@@ -8,7 +8,7 @@
                     <v-btn color="secondary" class="mb-4">Annuler</v-btn>
                 </nuxt-link>
                 <v-card>
-                    <v-card-title>Ajout catégorie</v-card-title>
+                    <v-card-title>Edit Catégorie</v-card-title>
                     <v-card-subtitle>
                         <form action="" class="form">
                             <v-text-field @keydown.enter.prevent="saveBtn" label="Saisir une Catégorie" class="form__control" v-model="categoryField" hide-details="auto">
@@ -29,14 +29,15 @@ import SidebarVue from "/components/admin/Sidebar.vue";
 
 import {
     addTag,
+    updateTag,
     getAllTags
 } from '/functions/tag.js'
 
 export default {
-    name: "createCategoryPage",
+    name: "EditCategoryPage",
     head() {
         return {
-            title: 'Create-category',
+            title: 'Update-Category',
         }
     },
     components: {
@@ -44,6 +45,7 @@ export default {
     },
     data() {
         return {
+            id: null,
             categoryField: '',
         }
     },
@@ -56,21 +58,34 @@ export default {
                     var found = false
 
                     for (const item in result) {
-                        if (result[item].id === this.categoryField) {
-                            this.$toast.warning("La catégorie existe déjà !");
+                        if (result[item].name === this.categoryField) {
+                            this.$toast.warning("La nouvelle catégorie existe déjà !");
                             found = true
                             break
                         }
                     }
 
                     if (found == false) {
-                        addTag(this.$auth.strategy.token.get(), this.categoryField)
-                        this.$router.push({path: '/admin/category'})
+                        if (this.id == null) {
+                            addTag(this.$auth.strategy.token.get(), this.categoryField)
+                        } else {
+                            updateTag(this.$auth.strategy.token.get(), parseInt(this.id), this.categoryField)
+                        }
+
+                        this.$router.push({
+                            path: '/admin/category'
+                        })
                     }
                 });
             }
         }
-    }
+    },
+    mounted: function () {
+        if (this.$route.query.id != null) {
+            this.id = parseInt(this.$route.query.id)
+            this.categoryField = this.$route.query.name
+        }
+    },
 };
 </script>
 
