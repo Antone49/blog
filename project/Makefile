@@ -28,7 +28,7 @@ down:
 ## build_broker: builds the broker binary as a linux executable
 build_broker:
 	@echo "Building broker binary..."
-	cd ../broker-service && env GOOS=linux CGO_ENABLED=0 go build -o ${BROKER_BINARY} ./cmd/api
+	cd ../back-end/broker-service && env GOOS=linux CGO_ENABLED=0 go build -o ${BROKER_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_front: builds the frone end binary
@@ -40,31 +40,31 @@ install_front:
 ## build_logger: builds the logger binary as a linux executable
 build_logger:
 	@echo "Building logger binary..."
-	cd ../logger-service && env GOOS=linux CGO_ENABLED=0 go build -o ${LOGGER_BINARY} ./cmd/api
+	cd ../back-end/logger-service && env GOOS=linux CGO_ENABLED=0 go build -o ${LOGGER_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_post: builds the authentication binary as a linux executable
 build_auth:
 	@echo "Building authentication binary..."
-	cd ../authentication-service && env GOOS=linux CGO_ENABLED=0 go build -o ${AUTH_BINARY} ./cmd/api
+	cd ../back-end/authentication-service && env GOOS=linux CGO_ENABLED=0 go build -o ${AUTH_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_post: builds the image binary as a linux executable
 build_image:
 	@echo "Building image binary..."
-	cd ../image-service && env GOOS=linux CGO_ENABLED=0 go build -o ${IMAGE_BINARY} ./cmd/api
+	cd ../back-end/image-service && env GOOS=linux CGO_ENABLED=0 go build -o ${IMAGE_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_post: builds the post binary as a linux executable
 build_post:
 	@echo "Building post binary..."
-	cd ../post-service && env GOOS=linux CGO_ENABLED=0 go build -o ${POST_BINARY} ./cmd/api
+	cd ../back-end/post-service && env GOOS=linux CGO_ENABLED=0 go build -o ${POST_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_mail: builds the mail binary as a linux executable
 build_mail:
 	@echo "Building mail binary..."
-	cd ../mail-service && env GOOS=linux CGO_ENABLED=0 go build -o ${MAIL_BINARY} ./cmd/api
+	cd ../back-end/mail-service && env GOOS=linux CGO_ENABLED=0 go build -o ${MAIL_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## start: starts the front end, install_front if it was never realized

@@ -4,7 +4,7 @@ services:
 
   broker-service:
     build:
-      context: ./../broker-service
+      context: ./../back-end/broker-service
       dockerfile: ./broker-service.dockerfile
     restart: always
     ports:
@@ -15,7 +15,7 @@ services:
 
   post-service:
     build:
-      context: ./../post-service
+      context: ./../back-end/post-service
       dockerfile: ./post-service.dockerfile
     restart: always
     ports:
@@ -28,7 +28,7 @@ services:
 
   logger-service:
     build:
-      context: ./../logger-service
+      context: ./../back-end/logger-service
       dockerfile: ./logger-service.dockerfile
     restart: always
     ports:
@@ -39,7 +39,7 @@ services:
 
   mail-service:
     build:
-      context: ./../mail-service
+      context: ./../back-end/mail-service
       dockerfile: ./mail-service.dockerfile
     restart: always
     ports:
@@ -59,7 +59,7 @@ services:
 
   authentication-service:
     build:
-      context: ./../authentication-service
+      context: ./../back-end/authentication-service
       dockerfile: ./authentication-service.dockerfile
     restart: always
     ports:
@@ -72,7 +72,7 @@ services:
 
   image-service:
     build:
-      context: ./../image-service
+      context: ./../back-end/image-service
       dockerfile: ./image-service.dockerfile
     volumes:
     -  volume_image:/usr/src/images

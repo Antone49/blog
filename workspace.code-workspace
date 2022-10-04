@@ -7,22 +7,22 @@
             "path": "project"
         },
         {
-            "path": "broker-service"
+            "path": "back-end/authentication-service"
         },
         {
-            "path": "mail-service"
+            "path": "back-end/broker-service"
         },
         {
-            "path": "post-service"
+            "path": "back-end/image-service"
         },
         {
-            "path": "authentication-service"
+            "path": "back-end/logger-service"
         },
         {
-            "path": "logger-service"
+            "path": "back-end/mail-service"
         },
         {
-            "path": "image-service"
+            "path": "back-end/post-service"
         }
     ],
     "settings": {
