@@ -72,6 +72,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		"updateLocation" : 		{true,  	app.sendRequestPost,			"POST", 	"updateLocation", 		requestPayload.Location},
 		"removeLocation" : 		{true,  	app.sendRequestPost, 			"POST", 	"removeLocation", 		requestPayload.Location},
 		"getPostLocations" : 	{false, 	app.sendRequestPost, 			"GET", 		"getPostLocations", 	requestPayload.Post},
+		"getAllPostLocations" : {false, 	app.sendRequestPost, 			"GET", 		"getAllPostLocations", 	nil},
 		"updatePostImage" : 	{false, 	app.sendRequestPost, 			"POST", 	"updatePostImage", 		requestPayload.Post},
 		"updatePostLocations" : {true, 		app.sendRequestPost, 			"POST", 	"updatePostLocations",	requestPayload.PostLocation},
 		"mailContactUs" : 		{false, 	app.sendRequestMail, 			"POST", 	"send", 				requestPayload.Mail},

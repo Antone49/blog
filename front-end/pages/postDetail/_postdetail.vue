@@ -1,8 +1,8 @@
 <template>
 <div>
     <NavbarMobileVue />
-    <PostDetailHeroVue :title="item.title" />
-    <PostDetailVue :category="item.category" :title="item.title" :content="item.content" :image="item.image" :lastestPosts="lastestPosts" :tags="tags" />
+    <PostDetailHeroVue :image="image" />
+    <PostDetailVue :title="title" :content="content" :tags="tags" />
     <PostMessageVue />
     <FooterVue />
 </div>
@@ -17,19 +17,15 @@ import PostDetailHeroVue from "/components/front/PostDetailHero.vue";
 
 import {
     getPost,
-    getLastestPosts
+    getPostTags
 } from '/functions/post.js'
-
-import {
-    getAllTags
-} from '/functions/tag.js'
 
 export default {
     name: "PostDetail",
     auth: false,
     head() {
         return {
-            title: this.item.title,
+            title: this.title,
         }
     },
     components: {
@@ -40,40 +36,25 @@ export default {
         PostMessageVue,
     },
     data: () => ({
-        item: {
-            title: null,
-            content: null,
-            category: null,
-            image: "http://localhost:8800/images/loading.png",
-        },
-        lastestPosts: null,
+        title: null,
+        content: null,
+        image: "http://localhost:8800/images/loading.png",
         tags: null
     }),
-    methods: {
-        getPost,
-        getLastestPosts,
-        getAllTags
-    },
     mounted: function () {
         var idPost = parseInt(this.$route.query.id)
 
-        this.getPost(idPost).then(result => {
+        getPost(idPost).then(result => {
             if (result != null) {
-                this.item.title = result.title
-                this.item.content = result.content
-                this.item.image = "http://localhost:8800" + result.image
+                this.title = result.title
+                this.content = result.content
+                this.image = "http://localhost:8800" + result.image
             }
         });
 
-        this.getAllTags().then(result => {
+        getPostTags(idPost).then(result => {
             if (result != null) {
                 this.tags = result
-            }
-        });
-
-        this.getLastestPosts(4).then(result => {
-            if (result != null) {
-                this.lastestPosts = result
             }
         });
     },

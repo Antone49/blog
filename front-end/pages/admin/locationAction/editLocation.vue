@@ -10,23 +10,22 @@
         <v-card>
             <v-col xl="12" lg="12" md="12" sm="12" xs="12">
                 <v-card-title>Edit location</v-card-title>
+                <br>
                 <v-card-subtitle>
                     <form action="" class="form">
                         <v-row>
-                            <v-col xl="6" lg="6" md="6" sm="12" xs="12">
-                                <v-text-field label="Nom" class="form__control" v-model="name" hide-details="auto" />
-                            </v-col>
-                            <br>
-                            <v-col xl="6" lg="6" md="6" sm="12" xs="12">
-                                <v-select :items="items" label="Image" v-on:change="onMarkerChangeIcon" v-model="markerImage">
-                                    <template v-slot:selection="{ item, index }">
-                                        <img :src="'/images/location/' + item" width="20" height="20">
-                                    </template>
-                                    <template v-slot:item="{ item }">
-                                        <img :src="'/images/location/' + item" width="30" height="30">
-                                    </template>
-                                </v-select>
-                            </v-col>
+                            <v-text-field label="Nom" class="form__control" v-model="name" hide-details="auto" />
+                            <v-text-field label="Latitude" class="form__control" @change="onPositionChange" v-model="latitude" hide-details="auto" type="number" />
+                            <v-text-field label="Longitude" class="form__control" @change="onPositionChange" v-model="longitude" hide-details="auto" type="number" />
+
+                            <v-select :items="items" label="Image" v-on:change="onMarkerChangeIcon" v-model="markerImage">
+                                <template v-slot:selection="{ item, index }">
+                                    <img :src="item" width="20" height="20">
+                                </template>
+                                <template v-slot:item="{ item }">
+                                    <img :src="item" width="30" height="30">
+                                </template>
+                            </v-select>
                         </v-row>
 
                         <v-btn @click="saveBtn" color="error" class="login__btn">Sauvegarder</v-btn>
@@ -65,11 +64,13 @@ export default {
         return {
             id: null,
             name: '',
+            latitude: 0,
+            longitude: 0,
             mapCenter: [23.791474915526848, 90.41672529214094],
-            mapZoom: 15,
+            mapZoom: 8,
             marker: null,
-            markerImage: './default.png',
-            items: [], 
+            markerImage: '/images/location/default.png',
+            items: [],
 
         }
     },
@@ -92,16 +93,20 @@ export default {
         onMarkerChangeIcon() {
             this.markerChangeIcon(this.markerImage)
         },
+        onPositionChange() {
+            debugger
+            this.marker.setLatLng([this.latitude, this.longitude])
+        },
         markerChangeIcon(icon) {
             var myIcon = L.icon({
-                iconUrl: "/images/location/" + icon,
+                iconUrl: icon,
                 iconSize: [25, 25]
             });
             this.marker.setIcon(myIcon)
         },
         importAllImages(r) {
             r.keys().forEach(key => (
-                this.items.push(key)
+                this.items.push('/images/location/' + key)
             ));
         },
         loadMap() {
@@ -130,7 +135,13 @@ export default {
 
             // Adding marker to the map
             this.marker.addTo(map);
+
+            this.marker.on("dragend", this.markerOnDragEnd);
         },
+        markerOnDragEnd() {
+            this.latitude = this.marker.getLatLng().lat
+            this.longitude = this.marker.getLatLng().lng
+        }
     },
     mounted: function () {
         this.id = parseInt(this.$route.query.id)
@@ -144,6 +155,8 @@ export default {
             getLocation(this.$auth.strategy.token.get(), this.id).then(result => {
                 if (result != null) {
                     this.name = result.name
+                    this.latitude = result.latitude
+                    this.longitude = result.longitude
                     this.marker.setLatLng([result.latitude, result.longitude])
 
                     this.markerImage = result.image

@@ -19,7 +19,7 @@ type ActionDataMap struct {
 	Command         string
 }
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 5 // 5MB
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 10 // 10MB
 
 func (app *Config) HandleDataSubmission(w http.ResponseWriter, r *http.Request) {
 	log.Printf("HandleDataSubmission\n")

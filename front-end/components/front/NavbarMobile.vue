@@ -24,7 +24,6 @@ export default {
     },
     methods: {
         changeColor() {
-            console.log(document.body.scrollTop)
             if (document.body.scrollTop > 250 ||
                 document.documentElement.scrollTop > 250) {
                 this.bg = 'grey';

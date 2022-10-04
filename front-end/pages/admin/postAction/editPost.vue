@@ -54,12 +54,15 @@
                             <v-file-input accept="image/*" label="Image" chips outlined v-model="file" @change="previewImage"></v-file-input>
 
                             <textarea v-model="content" id="file-picker"></textarea>
+
+                            <v-btn color="success" @click="updateBtn" class="login__btn">Update Vue</v-btn>
                             <v-btn color="error" @click="saveBtn" class="login__btn">Sauvegarder</v-btn>
                         </form>
                     </v-card-subtitle>
                 </v-card>
             </v-col>
             <v-col xl="12" lg="12" md="12" sm="12" xs="12">
+                <PostDetailHeroVue :image="image" />
                 <PostDetailVue :category="category" :title="title" :content="content" :image="imageView" />
             </v-col>
         </v-row>
@@ -70,6 +73,7 @@
 <script>
 import SidebarVue from "/components/admin/Sidebar.vue";
 import PostDetailVue from "/components/front/PostDetail.vue";
+import PostDetailHeroVue from "/components/front/PostDetailHero.vue";
 
 import {
     addPost,
@@ -105,6 +109,7 @@ export default {
     components: {
         SidebarVue,
         PostDetailVue,
+        PostDetailHeroVue
     },
     data: () => ({
         id: NaN,
@@ -182,12 +187,11 @@ export default {
             });
         }
 
+        tinymce.remove();
         tinymce.init({
             selector: 'textarea#file-picker',
             plugins: 'lists link image table code help wordcount',
             toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table | fontsizeselect | code',
-            skin: "oxide-dark",
-            content_css: "dark",
             /* enable title field in the Image dialog*/
             image_title: true,
             file_picker_types: 'image',
@@ -213,13 +217,6 @@ export default {
 
                 input.click();
             },
-            image_upload_handler_callback: (blobInfo, progress) => new Promise((resolve, reject) => {
-                debugger
-                uploadImage(this.$auth.strategy.token.get(), blobInfo.blob()).then(result => {
-                   debugger
-                });
-            }),
-
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
         });
     },
@@ -267,6 +264,11 @@ export default {
                 removePost(this.$auth.strategy.token.get(), this.id)
             }
         },
+        updateBtn() {
+            debugger
+            var content = tinymce.activeEditor.getContent();
+            this.content = content
+        }
     }
 };
 </script>

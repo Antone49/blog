@@ -130,4 +130,4 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../images
+      device: ../content/images

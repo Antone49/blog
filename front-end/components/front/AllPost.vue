@@ -43,20 +43,19 @@ export default {
         }
     },
     methods: {
-        getAllPosts,
         search(event) {
-            this.getAllPosts(this['searchField']).then(result => {
-                this['datas'] = result
+            getAllPosts(this.searchField).then(result => {
+                this.datas = result
             });
         }
     },
     mounted: function () {
         if (this.$route.query.search != null) {
-            this['searchField'] = this.$route.query.search
+            this.searchField = this.$route.query.search
         }
 
-        this.getAllPosts(this['searchField']).then(result => {
-            this['datas'] = result
+        getAllPosts(this.searchField).then(result => {
+            this.datas = result
         });
     },
 };

@@ -6,8 +6,40 @@ import (
 )
 
 type PostLocation struct {
-	PostId	int       
-	LocationId	int
+	PostId		int     `json:"postId"`
+	LocationId	int     `json:"locationId"`
+}
+
+func (l *PostLocation) GetAll() ([]*PostLocation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	query := `select postId, locationId	from postLocation`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var postLocations []*PostLocation
+
+	for rows.Next() {
+		var postLocation PostLocation
+		err := rows.Scan(
+			&postLocation.PostId,
+			&postLocation.LocationId,
+		)
+
+		if err != nil {
+			log.Println("Error scanning", err)
+			return nil, err
+		}
+
+		postLocations = append(postLocations, &postLocation)
+	}
+
+	return postLocations, nil
 }
 
 func (t *PostLocation) RemoveByPostId(postId int) error {

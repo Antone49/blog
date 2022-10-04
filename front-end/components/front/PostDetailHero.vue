@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="bg_image" style="background-image: url('http://localhost:8800/images/dhaka_2.jpg');height:60vh;">
+    <div class="bg_image" :style="'background-image: url(' + image + ');height:70vh;q'">
         <NavbarContentVue />
     </div>
 </div>
@@ -12,7 +12,7 @@ import NavbarContentVue from "./NavbarContent.vue";
 export default {
     name: "PostDetailHero",
     props: {
-        title: String,
+        image: String,
     },
     components: {
         NavbarContentVue,

@@ -16,7 +16,7 @@ type jsonImage struct {
 }
 
 const DATA_DIRECTORY = "usr/src"
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 5// 5MB
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 10 // 10MB
 
 func (app *Config) sendResponse(w http.ResponseWriter, response any) {
 	b, err := json.Marshal(response)

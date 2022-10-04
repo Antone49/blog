@@ -77,3 +77,22 @@ stop:
 	@echo "Stopping front end..."
 	killall node
 	@echo "Stopped front end!"
+
+database_export:
+	@echo "Export database..."
+	docker exec -it project_postgres_1 mkdir -p /tmp/db-backup/
+	docker exec -it project_postgres_1 bash -c "pg_dump -Fc -U postgres blog > /tmp/db-backup/db_`date +"%F_%T"`.pgsq"
+	docker cp project_postgres_1:/tmp/db-backup/ ../content
+	docker exec -it project_postgres_1 bash -c "rm -rf /tmp/db-backup"
+	@echo "Export database!"
+
+database_import:
+	@echo "Import ${file} database..."
+	docker exec -it project_postgres_1 mkdir -p /tmp/db-backup/
+	docker cp ../content/db-backup/${file} project_postgres_1:/tmp/db-backup/
+	docker exec -it project_postgres_1 bash -c "pg_restore --verbose --clean -U postgres -d blog /tmp/db-backup/${file}"
+	docker exec -it project_postgres_1 bash -c "rm -rf /tmp/db-backup"
+	@echo "Import database!"
+
+database_list:
+	ls ../content/db-backup

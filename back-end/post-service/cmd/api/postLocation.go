@@ -6,6 +6,22 @@ import (
 	"net/http"
 )
 
+func (app *Config) getAllPostLocations(w http.ResponseWriter, r *http.Request) {
+	log.Println("getAllPostLocations")
+
+	// validate the user against the database
+	post, err := app.Models.PostLocation.GetAll()
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
+		return
+	}
+
+	app.sendResponse(w, post)
+
+	log.Println("getAllPostLocations end")
+}
+
 func (app *Config) getPostLocations(w http.ResponseWriter, r *http.Request) {
 	log.Println("getPostLocations")
 	var requestPayload struct {

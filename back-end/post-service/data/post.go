@@ -33,7 +33,7 @@ func (p *Post) GetAll(search string) ([]*Post, error) {
 					ON PostTag.postId = post.Id
 				LEFT JOIN Tag
 					ON PostTag.tagId = Tag.Id
-				WHERE Tag.Id = '` + search + `'
+				WHERE Tag.name = '` + search + `'
 					OR post.title like '%` + search + `%'
 					OR post.content like '%` + search + `%';`
 	}

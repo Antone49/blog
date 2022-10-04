@@ -7,7 +7,7 @@
                 <v-card-title v-if="location != null"> Locations ({{ location.length }}) </v-card-title>
                 <v-card-actions>
                     <nuxt-link to="/admin/locationAction/editLocation?id=0">
-                        <v-btn color="red lighten-2">New </v-btn>
+                        <v-btn color="red lighten-2">New</v-btn>
                     </nuxt-link>
                 </v-card-actions>
             </v-card-text>
@@ -20,8 +20,8 @@
                             <tr>
                                 <th class="text-left">Nom</th>
                                 <th class="text-left">Image</th>
-                                <th class="text-left">Longitude</th>
                                 <th class="text-left">Latitude</th>
+                                <th class="text-left">Longitude</th>
                                 <th class="text-left">Editer</th>
                                 <th class="text-left">Supprimer</th>
                             </tr>
@@ -30,10 +30,10 @@
                             <tr v-for="(item, index) in location" :key="index">
                                 <td class="text-left">{{ item.name }}</td>
                                 <td class="">
-                                    <v-img :src="'http://localhost:8800/' + item.image" width="30" height="30" cover></v-img>
+                                    <v-img :src="item.image" width="30" height="30" cover></v-img>
                                 </td>
-                                <td class="text-left">{{ item.longitude }}</td>
                                 <td class="text-left">{{ item.latitude }}</td>
+                                <td class="text-left">{{ item.longitude }}</td>
                                 <td class="text-left">
                                     <nuxt-link :to="{ path: '/admin/locationAction/editLocation?id=' + item.id }">
                                         <v-btn text class="ma-2" @click="edit_dialog = true" variant="text" color="blue">
