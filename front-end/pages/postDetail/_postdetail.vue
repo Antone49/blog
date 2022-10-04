@@ -44,7 +44,7 @@ export default {
             title: null,
             content: null,
             category: null,
-            image: "loading.png",
+            image: "http://localhost:8800/images/loading.png",
         },
         lastestPosts: null,
         tags: null
@@ -61,7 +61,7 @@ export default {
             if (result != null) {
                 this.item.title = result.title
                 this.item.content = result.content
-                this.item.image = result.image
+                this.item.image = "http://localhost:8800" + result.image
             }
         });
 

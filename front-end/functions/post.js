@@ -40,23 +40,18 @@ async function removePost(token, id) {
     return sendRequest(payload)
 }
 
-async function addPost(token, title, image, content) {
+async function addPost(token) {
     console.log('addPost');
 
     const payload = {
         action: 'addPost',
         token: token,
-        post: {
-            title: title,
-            image: image,
-            content: content,
-        }
     }
 
     return sendRequest(payload)
 }
 
-async function updatePost(token, id, title, image, content) {
+async function updatePost(token, id, title, content) {
     console.log('updatePost');
 
     const payload = {
@@ -65,8 +60,22 @@ async function updatePost(token, id, title, image, content) {
         post: {
             id: id,
             title: title,
-            image: image,
             content: content,
+        }
+    }
+
+    return sendRequest(payload)
+}
+
+async function updatePostImage(token, id, image) {
+    console.log('updatePostImage');
+
+    const payload = {
+        action: 'updatePostImage',
+        token: token,
+        post: {
+            id: id,
+            image: image,
         }
     }
 
@@ -142,4 +151,4 @@ async function getLastestPosts(number) {
     return sendRequest(payload)
 }
 
-export { getAllPosts, getPost, addPost, removePost, updatePost, getPostTags, updatePostTags, getLastestPosts, getPostLocations, updatePostLocations }
+export { getAllPosts, getPost, addPost, removePost, updatePost, updatePostImage, getPostTags, updatePostTags, getLastestPosts, getPostLocations, updatePostLocations }

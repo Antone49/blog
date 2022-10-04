@@ -63,24 +63,15 @@ func (app *Config) getPost(w http.ResponseWriter, r *http.Request) {
 func (app *Config) addPost(w http.ResponseWriter, r *http.Request) {
 	log.Println("addPost")
 
-	var requestPayload data.Post
-
-	err := app.readJSON(w, r, &requestPayload)
-	if err != nil {
-		log.Println(err)
-		app.errorJSON(w, err, http.StatusBadRequest)
-		return
-	}
-
 	// validate the user against the database
-	err = app.Models.Post.Insert(requestPayload)
+	post, err := app.Models.Post.Insert()
 	if err != nil {
 		log.Println(err)
 		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
 		return
 	}
 
-	app.sendResponse(w, nil)
+	app.sendResponse(w, post)
 
 	log.Println("addPost end")
 }
@@ -148,6 +139,31 @@ func (app *Config) updatePost(w http.ResponseWriter, r *http.Request) {
 	app.sendResponse(w, nil)
 
 	log.Println("updatePost end")
+}
+
+func (app *Config) updatePostImage(w http.ResponseWriter, r *http.Request) {
+	log.Println("updatePostImage")
+
+	var requestPayload data.Post
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	// validate the user against the database
+	err = app.Models.Post.UpdateImage(requestPayload)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, errors.New("invalid credentials"), http.StatusBadRequest)
+		return
+	}
+
+	app.sendResponse(w, nil)
+
+	log.Println("updatePostImage end")
 }
 
 func (app *Config) getLastestPosts(w http.ResponseWriter, r *http.Request) {

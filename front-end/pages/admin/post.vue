@@ -34,7 +34,7 @@
                                 <td class="">{{ item.title }}</td>
                                 <td class="">Php</td>
                                 <td class="">
-                                    <v-img :src="'/images/' + item.image" width="70" height="60" cover></v-img>
+                                    <v-img :src="'http://localhost:8800' + item.image" width="70" height="60" cover></v-img>
                                 </td>
                                 <td class="">44</td>
                                 <td class="">

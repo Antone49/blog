@@ -13,7 +13,7 @@
                             </nuxt-link>
                         </l-popup>
                         <l-icon>
-                            <img height="20px" :src="'/images/location/' + item.image" />
+                            <img height="20px" :src="'http://localhost:8800' + item.image" />
                         </l-icon>
                     </l-marker>
                 </l-map>

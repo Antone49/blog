@@ -19,6 +19,7 @@ type RequestPayload struct {
 	Tag   			any 	`json:"tag,omitempty"`
 	Mail   			any 	`json:"mail,omitempty"`
 	Location   		any 	`json:"location,omitempty"`
+	Image   		any 	`json:"image,omitempty"`
 }
 
 type PointerFunc func(w http.ResponseWriter, method, command string, payload any)
@@ -58,7 +59,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	var actionMap = map[string]ActionMap{ 
 		"getAllPosts" : 		{false, 	app.sendRequestPost, 			"GET", 		"getAllPosts", 			requestPayload.Post},
 		"getPost" : 			{false, 	app.sendRequestPost, 			"GET", 		"getPost",  			requestPayload.Post},
-		"addPost" : 			{true,  	app.sendRequestPost, 			"POST", 	"addPost", 				requestPayload.Post},
+		"addPost" : 			{true,  	app.sendRequestPost, 			"POST", 	"addPost", 				nil},
 		"updatePost" : 			{true,  	app.sendRequestPost,			"POST", 	"updatePost", 			requestPayload.Post},
 		"removePost" : 			{true,  	app.sendRequestPost, 			"POST", 	"removePost", 			requestPayload.Post},
 		"getLastestPosts" : 	{false, 	app.sendRequestPost, 			"GET", 		"getLastestPosts", 		requestPayload.Post},
@@ -71,6 +72,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		"updateLocation" : 		{true,  	app.sendRequestPost,			"POST", 	"updateLocation", 		requestPayload.Location},
 		"removeLocation" : 		{true,  	app.sendRequestPost, 			"POST", 	"removeLocation", 		requestPayload.Location},
 		"getPostLocations" : 	{false, 	app.sendRequestPost, 			"GET", 		"getPostLocations", 	requestPayload.Post},
+		"updatePostImage" : 	{false, 	app.sendRequestPost, 			"POST", 	"updatePostImage", 		requestPayload.Post},
 		"updatePostLocations" : {true, 		app.sendRequestPost, 			"POST", 	"updatePostLocations",	requestPayload.PostLocation},
 		"mailContactUs" : 		{false, 	app.sendRequestMail, 			"POST", 	"send", 				requestPayload.Mail},
 		"login" : 				{false, 	app.sendRequestAuthentication, 	"POST", 	"login", 				requestPayload.Login},
@@ -78,6 +80,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		"addTag" : 				{true,  	app.sendRequestPost, 			"POST", 	"addTag", 				requestPayload.Tag},
 		"updateTag" : 			{true,  	app.sendRequestPost,			"POST", 	"updateTag", 			requestPayload.Tag},
 		"removeTag" : 			{true,  	app.sendRequestPost, 			"POST", 	"removeTag", 			requestPayload.Tag},
+		"uploadImage" : 		{true,  	app.sendRequestPost, 			"POST", 	"uploadImage", 			requestPayload.Image},
 	}
 
 	// if action exists

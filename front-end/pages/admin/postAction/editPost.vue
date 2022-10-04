@@ -5,7 +5,7 @@
         <v-row justify="center" class="mt-12">
             <v-col xl="12" lg="12" md="12" sm="12" xs="12">
                 <nuxt-link to="/admin/post">
-                    <v-btn color="secondary" class="mb-4">Annuler</v-btn>
+                    <v-btn color="secondary" @click="cancelBtn" class="mb-4">Annuler</v-btn>
                 </nuxt-link>
                 <v-card>
                     <v-card-title>Edite Post</v-card-title>
@@ -14,6 +14,7 @@
                         <form action="" class="form">
                             <v-text-field label="Titre" v-model="title" class="form__control" hide-details="auto" outlined>
                             </v-text-field>
+
                             <v-select class="mt-3" label="Catégories" v-model="tagsPost" :items="allTags" multiple outlined>
                                 <template v-slot:selection="{ item }">
                                     <v-chip>
@@ -34,7 +35,7 @@
                             <v-select class="mt-3" label="Locations" v-model="locationsPost" :items="allLocations" multiple outlined>
                                 <template v-slot:selection="{ item, index }">
                                     <v-chip>
-                                        <img :src="'/images/location/' + item.image" width="25" height="25">
+                                        <img :src="'http://localhost:8800' + item.image" width="25" height="25">
                                         {{item.name}}
                                     </v-chip>
                                 </template>
@@ -45,21 +46,21 @@
                                     <v-icon v-else class="mr-3">
                                         mdi-checkbox-blank-outline
                                     </v-icon>
-                                    <img :src="'/images/location/' + item.image" width="30" height="30">
+                                    <img :src="'http://localhost:8800' + item.image" width="30" height="30">
                                     {{item.name}}
                                 </template>
                             </v-select>
 
-                            <v-file-input accept="image/*" label="Image" outlined></v-file-input>
-                            <vue-editor v-model="content" />
+                            <v-file-input accept="image/*" label="Image" chips outlined v-model="file" @change="previewImage"></v-file-input>
 
+                            <textarea v-model="content" id="file-picker"></textarea>
                             <v-btn color="error" @click="saveBtn" class="login__btn">Sauvegarder</v-btn>
                         </form>
                     </v-card-subtitle>
                 </v-card>
             </v-col>
             <v-col xl="12" lg="12" md="12" sm="12" xs="12">
-                <PostDetailVue :category="category" :title="title" :content="content" :image="image" />
+                <PostDetailVue :category="category" :title="title" :content="content" :image="imageView" />
             </v-col>
         </v-row>
     </v-container>
@@ -77,7 +78,9 @@ import {
     getPostTags,
     updatePostTags,
     getPostLocations,
-    updatePostLocations
+    updatePostLocations,
+    updatePostImage,
+    removePost
 } from '/functions/post.js'
 
 import {
@@ -87,6 +90,10 @@ import {
 import {
     getAllTags
 } from '/functions/tag.js'
+
+import {
+    uploadImage
+} from '/functions/image.js'
 
 export default {
     name: "editPostPage",
@@ -100,15 +107,19 @@ export default {
         PostDetailVue,
     },
     data: () => ({
-        id: 0,
+        id: NaN,
+        isNewPost: false,
         title: null,
         content: null,
         category: null,
-        image: "loading.png",
+        image: null,
+        imageView: "http://localhost:8800/images/loading.png",
         allTags: [],
         tagsPost: [],
         allLocations: [],
         locationsPost: [],
+        file: null,
+        readers: null,
     }),
     mounted: function () {
         this.id = parseInt(this.$route.query.id)
@@ -117,7 +128,7 @@ export default {
             if (result != null) {
                 this.allTags = result
 
-                if (this.id != 0) {
+                if (!isNaN(this.id)) {
                     getPostTags(this.id).then(result => {
                         if (result != null) {
                             for (const i in result) {
@@ -137,7 +148,7 @@ export default {
             if (result != null) {
                 this.allLocations = result
 
-                if (this.id != 0) {
+                if (!isNaN(this.id)) {
                     getPostLocations(this.id).then(result => {
                         if (result != null) {
                             for (const i in result) {
@@ -153,22 +164,71 @@ export default {
             }
         });
 
-        if (this.id != 0) {
+        if (!isNaN(this.id)) {
             getPost(this.id).then(result => {
                 if (result != null) {
                     this.title = result.title
                     this.content = result.content
                     this.image = result.image
+                    this.imageView = "http://localhost:8800" + this.image
+                }
+            });
+        } else {
+            addPost(this.$auth.strategy.token.get()).then(result => {
+                if (result != null) {
+                    this.id = result.id
+                    this.isNewPost = true
                 }
             });
         }
+
+        tinymce.init({
+            selector: 'textarea#file-picker',
+            plugins: 'lists link image table code help wordcount',
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table | fontsizeselect | code',
+            skin: "oxide-dark",
+            content_css: "dark",
+            /* enable title field in the Image dialog*/
+            image_title: true,
+            file_picker_types: 'image',
+            /* and here's our custom image picker*/
+            file_picker_callback: (cb, value, meta) => {
+                const input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        uploadImage(this.$auth.strategy.token.get(), file).then(result => {
+                            cb("http://localhost:8800" + result.filename, {
+                                title: file.name
+                            });
+                        });
+                    });
+                    reader.readAsDataURL(file);
+                });
+
+                input.click();
+            },
+            image_upload_handler_callback: (blobInfo, progress) => new Promise((resolve, reject) => {
+                debugger
+                uploadImage(this.$auth.strategy.token.get(), blobInfo.blob()).then(result => {
+                   debugger
+                });
+            }),
+
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+        });
     },
     methods: {
         saveBtn() {
-            if (this.id == 0) {
-                addPost(this.$auth.strategy.token.get(), this.title, this.image, this.content)
-            } else {
-                updatePost(this.$auth.strategy.token.get(), this.id, this.title, this.image, this.content)
+            var content = tinymce.activeEditor.getContent();
+
+            if (!isNaN(this.id)) {
+                updatePost(this.$auth.strategy.token.get(), this.id, this.title, content)
 
                 var tagsId = []
                 for (const i in this.tagsPost) {
@@ -183,12 +243,30 @@ export default {
                 }
 
                 updatePostLocations(this.$auth.strategy.token.get(), this.id, locationId)
+
+                if (this.file) {
+                    uploadImage(this.$auth.strategy.token.get(), this.file).then(result => {
+                        updatePostImage(this.$auth.strategy.token.get(), this.id, result.filename)
+                    });
+                }
             }
 
             this.$router.push({
                 path: '/admin/post'
             })
-        }
+        },
+        previewImage() {
+            const reader = new FileReader();
+            reader.readAsDataURL(this.file);
+            reader.onload = e => {
+                this.imageView = e.target.result;
+            };
+        },
+        cancelBtn() {
+            if (this.isNewPost) {
+                removePost(this.$auth.strategy.token.get(), this.id)
+            }
+        },
     }
 };
 </script>

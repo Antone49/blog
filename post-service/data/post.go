@@ -111,9 +111,9 @@ func (p *Post) Get(id int) (*Post, error) {
 
 	query := `select id, title, image, content, created_at, updated_at from post where id = $1`
 
-	var post Post
 	row := db.QueryRowContext(ctx, query, id)
 
+	var post Post
 	err := row.Scan(
 		&post.Id,
 		&post.Title,
@@ -138,16 +138,39 @@ func (p *Post) Update(post Post) error {
 
 	stmt := `update post set
 		title = $1,
-		image = $2,
-		content = $3,
-		updated_at = $4
-		where id = $5
+		content = $2,
+		updated_at = $3
+		where id = $4
 	`
 
 	_, err := db.ExecContext(ctx, stmt,
 		post.Title,
-		post.Image,
 		post.Content,
+		time.Now(),
+		post.Id,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Update updates one post in the database, using the information
+// stored in the receiver u
+func (p *Post) UpdateImage(post Post) error {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `update post set
+		image = $1,
+		updated_at = $2
+		where id = $3
+	`
+
+	_, err := db.ExecContext(ctx, stmt,
+		post.Image,
 		time.Now(),
 		post.Id,
 	)
@@ -175,24 +198,29 @@ func (p *Post) Delete(id int) error {
 }
 
 // Insert inserts a new user into the database, and returns the ID of the newly inserted row
-func (p *Post) Insert(post Post) (error) {
+func (p *Post) Insert() (*Post, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	stmt := `insert into post (title, image, content, created_at, updated_at)
-		values ($1, $2, $3, $4, $5)`
+	query := `insert into post (title, image, content, created_at, updated_at)
+		values ($1, $2, $3, $4, $5) RETURNING id;`
 
-	_, err := db.ExecContext(ctx, stmt,
-		post.Title,
-		post.Image,
-		post.Content,
+	row := db.QueryRowContext(ctx, query,
+		"",
+		"",
+		"",
 		time.Now(),
 		time.Now(),
 	)
 
+	var post Post
+	err := row.Scan(
+		&post.Id,
+	)
+
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &post, nil
 }

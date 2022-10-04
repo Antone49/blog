@@ -30,21 +30,21 @@
                             <tr v-for="(item, index) in location" :key="index">
                                 <td class="text-left">{{ item.name }}</td>
                                 <td class="">
-                                    <v-img :src="'/images/location/' + item.image" width="30" height="30" cover></v-img>
+                                    <v-img :src="'http://localhost:8800/' + item.image" width="30" height="30" cover></v-img>
                                 </td>
                                 <td class="text-left">{{ item.longitude }}</td>
                                 <td class="text-left">{{ item.latitude }}</td>
                                 <td class="text-left">
                                     <nuxt-link :to="{ path: '/admin/locationAction/editLocation?id=' + item.id }">
                                         <v-btn text class="ma-2" @click="edit_dialog = true" variant="text" color="blue">
-                                            <v-icon color="blue darken-3"> mdi-pencil</v-icon>
+                                            <v-icon color="blue darken-3">mdi-pencil</v-icon>
                                         </v-btn>
                                     </nuxt-link>
                                 </td>
                                 <td class="text-left">
                                     <nuxt-link :to="{ path: '/admin/locationAction/removeLocation?id=' + item.id + '&name=' + item.name}">
                                         <v-btn text class="ma-2" variant="text" color="red">
-                                            <v-icon color="red darken-3"> mdi-delete</v-icon>
+                                            <v-icon color="red darken-3">mdi-delete</v-icon>
                                         </v-btn>
                                     </nuxt-link>
                                 </td>

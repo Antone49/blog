@@ -1,4 +1,6 @@
-  async function sendRequest(payload) {
+import axios from 'axios';
+
+ async function sendRequest(payload) {
     var result = null
   
     const headers = new Headers();
@@ -10,7 +12,7 @@
         headers: headers,
     }
   
-    await fetch("http:\/\/localhost:8080/handle", body)
+    await fetch("http://localhost:8080/handle", body)
         .then((response) => response.json())
         .then((data) => {
             JSON.stringify(data, undefined, 4);
@@ -31,4 +33,28 @@
     return result
   }
 
-  export { sendRequest }
+  async function sendRequestFormdata(formData) {
+    var result = null
+
+    await axios
+        .post("http://localhost:8080/handleData", formData)
+        .then((data) => {
+            JSON.stringify(data, undefined, 4);
+            if (data.error) {
+                console.log('Error: ');
+            } else {
+                if(data.data.data){
+                    result  = JSON.parse(data.data.data)
+                } else {
+                    result = true
+                }
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+  
+    return result
+  }
+
+  export { sendRequest, sendRequestFormdata }

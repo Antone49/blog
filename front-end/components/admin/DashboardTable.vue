@@ -21,7 +21,7 @@
                                         <td class="text-left">{{ item.title.substr(0, 15) }}....</td>
                                         <td class="text-left">Php</td>
                                         <td class="text-left">
-                                            <v-img :src="'/images/' + item.image" width="70" height="45" cover></v-img>
+                                            <v-img :src="'http://localhost:8800' + item.image" width="70" height="45" cover></v-img>
                                         </td>
                                         <td class="text-left">44</td>
                                     </template>

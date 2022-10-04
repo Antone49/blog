@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="bg_image" style="background-image: url('/images/dhaka_2.jpg');height:60vh;">
+  <div class="bg_image" style="background-image: url('http://localhost:8800/images/dhaka_2.jpg');height:60vh;">
         <NavbarContentVue />
     </div>
 </div>

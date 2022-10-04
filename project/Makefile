@@ -3,6 +3,7 @@ POST_BINARY=postApp
 LOGGER_BINARY=loggerApp
 MAIL_BINARY=mailApp
 AUTH_BINARY=authApp
+IMAGE_BINARY=imageApp
 
 ## up: starts all containers in the background without forcing build
 up:
@@ -11,7 +12,7 @@ up:
 	@echo "Docker images started!"
 
 ## up_build: stops docker-compose (if running), builds all projects and starts docker compose
-up_build: build_broker build_post build_mail build_logger build_auth
+up_build: build_broker build_post build_mail build_logger build_auth build_image
 	@echo "Stopping docker images (if running...)"
 	docker-compose down
 	@echo "Building (when required) and starting docker images..."
@@ -46,6 +47,12 @@ build_logger:
 build_auth:
 	@echo "Building authentication binary..."
 	cd ../authentication-service && env GOOS=linux CGO_ENABLED=0 go build -o ${AUTH_BINARY} ./cmd/api
+	@echo "Done!"
+
+## build_post: builds the image binary as a linux executable
+build_image:
+	@echo "Building image binary..."
+	cd ../image-service && env GOOS=linux CGO_ENABLED=0 go build -o ${IMAGE_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_post: builds the post binary as a linux executable
