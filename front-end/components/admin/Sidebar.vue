@@ -59,6 +59,11 @@ export default {
                     title: "Location",
                     to: "/admin/location",
                 },
+                {
+                    icon: "mdi-comment-outline",
+                    title: "Comment",
+                    to: "/admin/comment",
+                },
             ],
             miniVariant: false,
             right: true,

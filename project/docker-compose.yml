@@ -83,6 +83,19 @@ services:
       mode: replicated
       replicas: 1
 
+  message-service:
+    build:
+      context: ./../back-end/message-service
+      dockerfile: ./message-service.dockerfile
+    restart: always
+    ports:
+      - "8086:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DSN: "host=postgres port=5432 user=postgres password=password dbname=blog sslmode=disable timezone=UTC connect_timeout=5"
+
   postgres:
     image: 'postgres:14.2'
     ports:

@@ -22,7 +22,6 @@ front-end/.DS_Store
 front-end/cmd/.DS_Store
 front-end/node_modules
 front-end/.nuxt
-front-end/static
 */.editorconfig
 */package-lock.json
 content

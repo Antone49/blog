@@ -34,12 +34,9 @@ export default {
             datas: null,
         }
     },
-    methods: {
-        getLastestPosts
-    },
     mounted: function () {
-        this.getLastestPosts(3).then(result => {
-            this['datas'] = result
+        getLastestPosts(3).then(result => {
+            this.datas = result
         });
     },
 };

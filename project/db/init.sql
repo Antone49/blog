@@ -26,6 +26,18 @@ CREATE TABLE token (
     FOREIGN KEY(userId) REFERENCES users(id)
 );
 
+CREATE TABLE message (
+    id SERIAL PRIMARY KEY,
+    message character varying(1024) NOT NULL UNIQUE,
+    username character varying(40) NOT NULL UNIQUE,
+    postId int,
+    valid BIT,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY(postId) REFERENCES post(id)
+);
+
+
 CREATE TABLE tag (
     id SERIAL PRIMARY KEY,
     name character varying(255) NOT NULL UNIQUE

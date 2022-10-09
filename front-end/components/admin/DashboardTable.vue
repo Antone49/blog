@@ -10,20 +10,16 @@
                             <thead>
                                 <tr>
                                     <th class="text-left">Title</th>
-                                    <th class="text-left">Category</th>
                                     <th class="text-left">image</th>
-                                    <th class="text-left">Views</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in posts" :key="index">
                                     <template v-if="index < 5">
-                                        <td class="text-left">{{ item.title.substr(0, 15) }}....</td>
-                                        <td class="text-left">Php</td>
+                                        <td class="text-left">{{ item.title.substr(0, 30) }}</td>
                                         <td class="text-left">
                                             <v-img :src="'http://localhost:8800' + item.image" width="70" height="45" cover></v-img>
                                         </td>
-                                        <td class="text-left">44</td>
                                     </template>
                                 </tr>
                             </tbody>
@@ -32,7 +28,7 @@
                 </v-card-subtitle>
                 <nuxt-link :to="{ path: '/admin/post' }">
                     <v-card-actions class="d-flex justify-end">
-                        <v-btn text color="red">View More </v-btn>
+                        <v-btn text color="red">View More</v-btn>
                     </v-card-actions>
                 </nuxt-link>
             </v-card>

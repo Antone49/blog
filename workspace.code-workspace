@@ -23,6 +23,9 @@
         },
         {
             "path": "back-end/post-service"
+        },
+        {
+            "path": "back-end/message-service"
         }
     ],
     "settings": {

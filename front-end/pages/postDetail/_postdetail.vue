@@ -3,7 +3,7 @@
     <NavbarMobileVue />
     <PostDetailHeroVue :image="image" />
     <PostDetailVue :title="title" :content="content" :tags="tags" />
-    <PostMessageVue />
+    <PostMessageVue :postId="postId" />
     <FooterVue />
 </div>
 </template>
@@ -39,12 +39,13 @@ export default {
         title: null,
         content: null,
         image: "http://localhost:8800/images/loading.png",
-        tags: null
+        tags: null,
+        postId: null
     }),
     mounted: function () {
-        var idPost = parseInt(this.$route.query.id)
+        this.postId = parseInt(this.$route.query.id)
 
-        getPost(idPost).then(result => {
+        getPost(this.postId).then(result => {
             if (result != null) {
                 this.title = result.title
                 this.content = result.content
@@ -52,7 +53,7 @@ export default {
             }
         });
 
-        getPostTags(idPost).then(result => {
+        getPostTags(this.postId).then(result => {
             if (result != null) {
                 this.tags = result
             }
